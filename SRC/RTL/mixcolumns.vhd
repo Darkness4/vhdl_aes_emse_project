@@ -3,7 +3,7 @@
 -- MixColumns selon AES
 
 library lib_aes;
-use lib_aes.crypt_pack.all;
+use lib_aes.crypt_pack.type_state;
 
 entity mixcolumns is
 

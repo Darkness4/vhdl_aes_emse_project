@@ -2,14 +2,14 @@
 -- 22 nov 2019
 -- SBox selon Rijndael
 
--- Utilisation du type bit8
 library lib_aes;
-use lib_aes.crypt_pack.all;
+use lib_aes.crypt_pack.bit8;
 
 
 library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
+use ieee.std_logic_1164.std_logic;
+use ieee.numeric_std.unsigned;
+use ieee.numeric_std.to_integer;
 
 entity sbox is
 

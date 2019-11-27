@@ -3,10 +3,10 @@
 -- ShiftRows Test Bench
 
 library ieee;
-use ieee.std_logic_1164.all;
+use ieee.std_logic_1164.std_logic;
 
 library lib_aes;
-use lib_aes.crypt_pack.all;
+use lib_aes.crypt_pack.type_state;
 
 library lib_rtl;
 
@@ -34,11 +34,7 @@ begin
   );
 
   -- Stimuli
-  data_i_s <= ((x"00", x"00", x"00", x"00"),
-               (x"00", x"00", x"00", x"00"),
-               (x"00", x"00", x"00", x"00"),
-               (x"00", x"00", x"00", x"00")),
-              ((x"af", x"16", x"ce", x"bc"),
+  data_i_s <= ((x"af", x"16", x"ce", x"bc"),
                (x"44", x"e6", x"91", x"62"),
                (x"d3", x"20", x"01", x"06"),
                (x"ab", x"b1", x"ae", x"d5")) after 50 ns;

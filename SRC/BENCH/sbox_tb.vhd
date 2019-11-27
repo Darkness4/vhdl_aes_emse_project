@@ -3,11 +3,10 @@
 -- SBox Test Bench
 
 library ieee;
-use ieee.std_logic_1164.all;
+use ieee.std_logic_1164.std_logic;
 
--- Utilisation du type bit8
 library lib_aes;
-use lib_aes.crypt_pack.all;
+use lib_aes.crypt_pack.bit8;
 
 library lib_rtl;
 

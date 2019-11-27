@@ -2,9 +2,8 @@
 -- 27 nov 2019
 -- AddRoundKey selon AES
 
--- utilisation du type type_state
 library lib_aes;
-use lib_aes.crypt_pack.all;
+use lib_aes.crypt_pack.type_state;
 
 library ieee;
 use ieee.std_logic_1164.all;

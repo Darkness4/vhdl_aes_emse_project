@@ -1,13 +1,12 @@
 -- Marc NGUYEN
--- 22 oct 2019
+-- 22 nov 2019
 -- SubBytes Test Bench
 
 library ieee;
-use ieee.std_logic_1164.all;
+use ieee.std_logic_1164.std_logic;
 
--- utilisation du type type_state
 library lib_aes;
-use lib_aes.crypt_pack.all;
+use lib_aes.crypt_pack.type_state;
 
 library lib_rtl;
 
@@ -36,11 +35,7 @@ begin
   );
 
   -- Stimuli
-  data_i_s <= ((x"00", x"00", x"00", x"00"),
-               (x"00", x"00", x"00", x"00"),
-               (x"00", x"00", x"00", x"00"),
-               (x"00", x"00", x"00", x"00")),
-              ((x"79", x"47", x"8b", x"65"),
+  data_i_s <= ((x"79", x"47", x"8b", x"65"),
                (x"1b", x"8e", x"81", x"aa"),
                (x"66", x"b7", x"7c", x"6f"),
                (x"62", x"c8", x"e4", x"03")) after 50 ns;

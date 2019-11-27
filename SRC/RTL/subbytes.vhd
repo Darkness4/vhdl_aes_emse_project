@@ -4,10 +4,8 @@
 -- concurrence.
 
 library lib_aes;
-use lib_aes.crypt_pack.all;
-
-library ieee;
-use ieee.std_logic_1164.all;
+use lib_aes.crypt_pack.type_state;
+use lib_aes.crypt_pack.bit8;
 
 library lib_rtl;
 

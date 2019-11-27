@@ -1,6 +1,6 @@
 -- Marc NGUYEN
--- 22 oct 2019
--- SubBytes Test Bench
+-- 27 nov 2019
+-- MixColumns Test Bench
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -11,13 +11,13 @@ use lib_aes.crypt_pack.all;
 
 library lib_rtl;
 
-entity subbytes_tb is
-end entity subbytes_tb;
+entity mixcolumns_tb is
+end entity mixcolumns_tb;
 
-architecture subbytes_tb_arch of subbytes_tb is
+architecture mixcolumns_tb_arch of mixcolumns_tb is
 
   -- Composant à tester
-  component subbytes
+  component mixcolumns
     port(
       data_i: in type_state;
       data_o: out type_state
@@ -30,7 +30,7 @@ architecture subbytes_tb_arch of subbytes_tb is
 
 begin
 
-  DUT: subbytes port map(
+  DUT: mixcolumns port map(
     data_i => data_i_s,
     data_o => data_o_s
   );
@@ -40,9 +40,9 @@ begin
                (x"00", x"00", x"00", x"00"),
                (x"00", x"00", x"00", x"00"),
                (x"00", x"00", x"00", x"00")),
-              ((x"79", x"47", x"8b", x"65"),
-               (x"1b", x"8e", x"81", x"aa"),
-               (x"66", x"b7", x"7c", x"6f"),
-               (x"62", x"c8", x"e4", x"03")) after 50 ns;
+              ((x"af", x"16", x"ce", x"bc"),
+               (x"e6", x"91", x"62", x"44"),
+               (x"01", x"06", x"d3", x"20"),
+               (x"d5", x"ab", x"b1", x"ae")) after 50 ns;
 
-end architecture subbytes_tb_arch;
+end architecture mixcolumns_tb_arch;

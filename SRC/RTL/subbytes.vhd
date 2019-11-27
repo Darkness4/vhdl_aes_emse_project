@@ -33,7 +33,7 @@ begin
 
   S_row: for i in 0 to 3 generate
     S_case: for j in 0 to 3 generate
-      sbox: sbox port map(
+      box: sbox port map(
         data_i => data_i(i)(j),
         data_o => data_o(i)(j)
       );

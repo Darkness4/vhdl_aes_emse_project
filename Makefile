@@ -17,13 +17,13 @@ LIBS:=$(LIBDIR)/$(LIB_AES) $(LIBDIR)/$(LIB_RTL) $(LIBDIR)/$(LIB_BENCH)
 
 SOURCES_AES:=$(wildcard $(SRCDIR)/THIRDPARTY/*.vhd)
 SOURCES_RTL:=$(wildcard $(SRCDIR)/RTL/*.vhd)
-SOURCE_TB:=$(wildcard $(SRCDIR)/BENCH/*_tb.vhd)
+SOURCES_TB:=$(wildcard $(SRCDIR)/BENCH/*_tb.vhd)
 SOURCES_TB_CONF:=$(wildcard $(SRCDIR)/BENCH/*_tb_conf.vhd)
-SOURCES:=$(SOURCES_AES) $(SOURCE_TB) $(SOURCE_TB_CONF) $(SOURCES_RTL)
+SOURCES:=$(SOURCES_AES) $(SOURCES_TB) $(SOURCES_TB_CONF) $(SOURCES_RTL)
 
 OBJECTS_AES:=$(SOURCES_AES:$(SRCDIR)/THIRDPARTY/%.vhd=$(LIBDIR)/$(LIB_AES)/%/)
 OBJECTS_RTL:=$(SOURCES_RTL:$(SRCDIR)/RTL/%.vhd=$(LIBDIR)/$(LIB_RTL)/%/)
-OBJECTS_TB:=$(SOURCE_TB:$(SRCDIR)/BENCH/%.vhd=$(LIBDIR)/$(LIB_BENCH)/%/)
+OBJECTS_TB:=$(SOURCES_TB:$(SRCDIR)/BENCH/%.vhd=$(LIBDIR)/$(LIB_BENCH)/%/)
 OBJECTS_TB_CONF:=$(SOURCES_TB_CONF:$(SRCDIR)/BENCH/%.vhd=$(LIBDIR)/$(LIB_BENCH)/%/)
 OBJECTS:=$(OBJECTS_AES) $(OBJECTS_RTL) $(OBJECTS_TB) $(OBJECTS_TB_CONF)
 
@@ -42,7 +42,7 @@ $(LIBDIR)/$(LIB_AES)/CryptPack/: $(SRCDIR)/THIRDPARTY/CryptPack.vhd $(LIBDIR)/$(
 $(LIBDIR)/$(LIB_AES)/KeyExpansion_I_O_table/: $(SRCDIR)/THIRDPARTY/KeyExpansion_I_O_table.vhd $(LIBDIR)/$(LIB_AES)/CryptPack/ $(LIBDIR)/$(LIB_AES)
 	$(VCOM) -work $(LIB_AES) $<
 	@echo "Compiled "$<" successfully!"
-	
+
 # -- Compile LIB_RTL : depends on LIB_AES --
 $(OBJECTS_RTL): $(LIBDIR)/$(LIB_RTL)/%/: $(SRCDIR)/RTL/%.vhd $(LIBS) $(OBJECTS_AES)
 	$(VCOM) -work $(LIB_RTL) $<
@@ -62,7 +62,7 @@ $(OBJECTS_TB_CONF): $(LIBDIR)/$(LIB_BENCH)/%/: $(SRCDIR)/BENCH/%.vhd $(LIBS) $(O
 $(LIBS): $(LIBDIR)/%: %
 	$(VLIB) $@
 	$(VMAP) $< $@
-	@echo "Library set "$<" successfully!"
+	@echo "Library "$<" set successfully!"
 
 $(LIB_AES) $(LIB_RTL) $(LIB_BENCH): ;
 
@@ -74,7 +74,6 @@ echoes:
 	@echo "$(SOURCES)"
 	@echo "OBJECTS :"
 	@echo "$(OBJECTS)"
-	
 
 .PHONY: clean
 clean:

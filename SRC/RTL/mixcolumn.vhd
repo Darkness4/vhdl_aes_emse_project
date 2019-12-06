@@ -22,37 +22,29 @@ architecture mixcolumn_arch of mixcolumn is
   
 begin
 
-  -- data_o(0) <= std_logic_vector(
-    -- (unsigned(data_i(0))*2) xor 
-    -- (unsigned(data_i(1))*3) xor
-    -- (unsigned(data_i(2))*1) xor
-    -- (unsigned(data_i(3))*1) xor
-    -- unsigned(("000" & data_i(7) & 
-     -- data_i(7) & "0" & data_i(7) & data_i(7)))
-  -- );
-  -- data_o(1) <= std_logic_vector(
-    -- (unsigned(data_i(0))*1) xor 
-    -- (unsigned(data_i(1))*2) xor
-    -- (unsigned(data_i(2))*3) xor
-    -- (unsigned(data_i(3))*1) xor
-    -- unsigned(("000" & data_i(7) & 
-     -- data_i(7) & "0" & data_i(7) & data_i(7)))
-  -- );
-  -- data_o(2) <= std_logic_vector(
-    -- (unsigned(data_i(0))*1) xor 
-    -- (unsigned(data_i(1))*1) xor
-    -- (unsigned(data_i(2))*2) xor
-    -- (unsigned(data_i(3))*3) xor
-    -- unsigned(("000" & data_i(7) & 
-     -- data_i(7) & "0" & data_i(7) & data_i(7)))
-  -- );
-  -- data_o(3) <= std_logic_vector(
-    -- (unsigned(data_i(0))*3) xor 
-    -- (unsigned(data_i(1))*1) xor
-    -- (unsigned(data_i(2))*1) xor
-    -- (unsigned(data_i(3))*2) xor
-    -- unsigned(("000" & data_i(7) & 
-     -- data_i(7) & "0" & data_i(7) & data_i(7))) 
-  -- );
+  data_o(0) <= std_logic_vector(
+    ((unsigned(data_i(0)) sll 1) xor ("000" & data_i(0)(7) & data_i(0)(7) & "0" & data_i(0)(7) & data_i(0)(7))) xor
+    (((unsigned(data_i(1)) sll 1) + unsigned(data_i(1))) xor ("000" & data_i(1)(7) & data_i(1)(7) & "0" & data_i(1)(7) & data_i(1)(7))) xor
+    (unsigned(data_i(2)) xor ("000" & data_i(2)(7) & data_i(2)(7) & "0" & data_i(2)(7) & data_i(2)(7))) xor
+    (unsigned(data_i(3)) xor ("000" & data_i(3)(7) & data_i(3)(7) & "0" & data_i(3)(7) & data_i(3)(7)))
+  );
+  data_o(1) <= std_logic_vector(
+    (unsigned(data_i(0)) xor ("000" & data_i(0)(7) & data_i(0)(7) & "0" & data_i(0)(7) & data_i(0)(7))) xor
+    ((unsigned(data_i(1)) sll 1) xor ("000" & data_i(1)(7) & data_i(1)(7) & "0" & data_i(1)(7) & data_i(1)(7))) xor
+    (((unsigned(data_i(2)) sll 1) + unsigned(data_i(2))) xor ("000" & data_i(2)(7) & data_i(2)(7) & "0" & data_i(2)(7) & data_i(2)(7))) xor
+    (unsigned(data_i(3)) xor ("000" & data_i(3)(7) & data_i(3)(7) & "0" & data_i(3)(7) & data_i(3)(7)))
+  );
+  data_o(2) <= std_logic_vector(
+    (unsigned(data_i(0)) xor ("000" & data_i(0)(7) & data_i(0)(7) & "0" & data_i(0)(7) & data_i(0)(7))) xor
+    (unsigned(data_i(1)) xor ("000" & data_i(1)(7) & data_i(1)(7) & "0" & data_i(1)(7) & data_i(1)(7))) xor
+    ((unsigned(data_i(2)) sll 1) xor ("000" & data_i(2)(7) & data_i(2)(7) & "0" & data_i(2)(7) & data_i(2)(7))) xor
+    (((unsigned(data_i(3)) sll 1)  + unsigned(data_i(2))) xor ("000" & data_i(3)(7) & data_i(3)(7) & "0" & data_i(3)(7) & data_i(3)(7)))
+  );
+  data_o(3) <= std_logic_vector(
+    (((unsigned(data_i(0)) sll 1) + unsigned(data_i(0))) xor ("000" & data_i(0)(7) & data_i(0)(7) & "0" & data_i(0)(7) & data_i(0)(7))) xor
+    (unsigned(data_i(1)) xor ("000" & data_i(1)(7) & data_i(1)(7) & "0" & data_i(1)(7) & data_i(1)(7))) xor
+    (unsigned(data_i(2)) xor ("000" & data_i(2)(7) & data_i(2)(7) & "0" & data_i(2)(7) & data_i(2)(7))) xor
+    ((unsigned(data_i(3)) sll 1) xor ("000" & data_i(3)(7) & data_i(3)(7) & "0" & data_i(3)(7) & data_i(3)(7)))
+  );
 
 end architecture mixcolumn_arch;

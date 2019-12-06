@@ -11,3 +11,20 @@
 # //  is prohibited from disclosure under the Trade Secrets Act,
 # //  18 U.S.C. Section 1905.
 # //
+vsim -voptargs=+acc LIB_BENCH.mixcolumn_tb
+# vsim -voptargs="+acc" LIB_BENCH.mixcolumn_tb 
+# Start time: 14:14:11 on Dec 06,2019
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading lib_aes.crypt_pack(body)
+# Loading work.mixcolumn_tb(mixcolumn_tb_arch)#1
+# Loading ieee.numeric_std(body)
+# Loading lib_rtl.mixcolumn(mixcolumn_arch)#1
+run -all
+# Break key hit
+# Break key hit
+# Break key hit
+# End time: 14:14:52 on Dec 06,2019, Elapsed time: 0:00:41
+# Errors: 0, Warnings: 0

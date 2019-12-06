@@ -35,7 +35,6 @@ begin
   );
 
   -- Stimuli
-  -- TODO
   data_i_s <= (x"af", x"16", x"ce", x"bc");
 
 end architecture mixcolumn_tb_arch;

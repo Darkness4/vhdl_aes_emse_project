@@ -399,6 +399,9 @@ end architecture mixcolumn_arch;
 La MixColumns possède comme **entrée** :
 
 - la matrice d'état en entrée que l'on nomme `data_i`, de type `type_state` [TODO: Lien vers Annexe].
+- `enable_i`, de type ``, qui permet :
+  - Si `enable = 1`, `data_out <= mixcolumns(data_i)`
+  - Sinon, `data_out <= data_i`, afin que l'on désactive lors du round final.
 
 La MixColumns possède comme **sortie** :
 
@@ -452,6 +455,8 @@ XOR
 ```
 
 data_i (column_state)=>[MixColumn]=>data_o(column_state)
+
+TODO: VHDL
 
 ### MixColumns TestBench
 
@@ -580,6 +585,20 @@ end architecture addroundkey_tb_arch;
 ```
 
 TODO: Validation. 
+
+## Round
+
+[TODO: Add Image 11 rounds]
+
+TODO: Rerédiger
+
+Il faudra mémoriser après un AddRoundKey.
+
+Il faut entrer la subkey, text clair.
+
+### Round Entity
+
+
 
 # Bibliographie
 

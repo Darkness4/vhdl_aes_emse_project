@@ -34,23 +34,23 @@ architecture mixcolumns_arch of mixcolumns is
 
 begin
 
-    rows_order_i: for i in 0 to 3 generate
-      columns_order_i: for j in 0 to 3 generate
-        columns_i_s(j)(i) <= data_i(i)(j);
-      end generate columns_order_i;
-    end generate rows_order_i;
+  rows_order_i: for i in 0 to 3 generate
+    columns_order_i: for j in 0 to 3 generate
+      columns_i_s(j)(i) <= data_i(i)(j);
+    end generate columns_order_i;
+  end generate rows_order_i;
 
-    columns_order: for j in 0 to 3 generate
-      MC: mixcolumn port map(
-        data_i => columns_i_s(j),
-        data_o => columns_o_s(j)
-      );
-    end generate columns_order;
+  columns_order: for j in 0 to 3 generate
+    MC: mixcolumn port map(
+      data_i => columns_i_s(j),
+      data_o => columns_o_s(j)
+    );
+  end generate columns_order;
 
-    rows_order_o: for i in 0 to 3 generate
-      columns_order_o: for j in 0 to 3 generate
-        data_o(i)(j) <= columns_o_s(j)(i) when enable_i = '1' else data_i(i)(j);
-      end generate columns_order_o;
-    end generate rows_order_o;
+  rows_order_o: for i in 0 to 3 generate
+    columns_order_o: for j in 0 to 3 generate
+      data_o(i)(j) <= columns_o_s(j)(i) when enable_i = '1' else data_i(i)(j);
+    end generate columns_order_o;
+  end generate rows_order_o;
 
 end architecture mixcolumns_arch;

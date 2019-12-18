@@ -31,7 +31,7 @@ package crypt_pack is
   constant Rcon : type_rcon := (
     X"01", X"02", X"04", X"08", X"10", X"20", X"40", X"80", X"1b", X"36", X"00"
     );
-	
+
   function "xor" ( L,R: column_state ) return column_state; 
 
 end crypt_pack;
@@ -39,14 +39,13 @@ end crypt_pack;
 
 package body crypt_pack is
 
-	function "xor" ( L,R: column_state ) return column_state is
-	variable RESULT: column_state;
-	begin
-	  	for i in 0 to 3 loop
-			RESULT(i) := L(i) xor R(i);
-		end loop;
-	        return RESULT;
-	end "xor";
+  function "xor" ( L,R: column_state ) return column_state is
+  variable RESULT: column_state;
+  begin
+    for i in 0 to 3 loop
+      RESULT(i) := L(i) xor R(i);
+    end loop;
+    return RESULT;
+  end "xor";
 
- 
 end crypt_pack;

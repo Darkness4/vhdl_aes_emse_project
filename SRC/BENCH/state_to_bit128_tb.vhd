@@ -1,34 +1,35 @@
 -- Marc NGUYEN
--- 27 oct 2019
--- ShiftRows Test Bench
+-- 11 dec 2019
+-- state_to_bit128 Test Bench
 
 library ieee;
 use ieee.std_logic_1164.std_logic;
 
 library lib_aes;
 use lib_aes.crypt_pack.type_state;
+use lib_aes.crypt_pack.bit128;
 
 library lib_rtl;
 
-entity shiftrows_tb is
-end entity shiftrows_tb;
+entity state_to_bit128_tb is
+end entity state_to_bit128_tb;
 
-architecture shiftrows_tb_arch of shiftrows_tb is
+architecture state_to_bit128_tb_arch of state_to_bit128_tb is
 
   -- Composant à tester
-  component shiftrows
+  component state_to_bit128
     port(
       data_i: in type_state;
-      data_o: out type_state
+      data_o: out bit128
     );
   end component;
 
   signal data_i_s: type_state;
-  signal data_o_s: type_state;
+  signal data_o_s: bit128;
 
 begin
 
-  DUT: shiftrows port map(
+  DUT: state_to_bit128 port map(
     data_i => data_i_s,
     data_o => data_o_s
   );
@@ -39,5 +40,5 @@ begin
                (x"d3", x"20", x"01", x"06"),
                (x"ab", x"b1", x"ae", x"d5"));
 
-end architecture shiftrows_tb_arch;
+end architecture state_to_bit128_tb_arch;
 

@@ -7,7 +7,7 @@ library lib_rtl;
 configuration subbytes_tb_conf of subbytes_tb is
   for subbytes_tb_arch
     for DUT: subbytes
-      use entity lib_rtl.subbytes(subbytes_arch);
+      use configuration lib_rtl.subbytes_conf;
     end for;
   end for;
 end configuration subbytes_tb_conf;

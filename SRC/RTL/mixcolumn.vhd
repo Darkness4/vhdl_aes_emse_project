@@ -1,6 +1,6 @@
 -- Marc NGUYEN
 -- 27 nov 2019
--- MixColumns selon AES
+-- MixColumn (pour 1 colonne) selon AES
 
 library lib_aes;
 use lib_aes.crypt_pack.column_state;

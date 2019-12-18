@@ -19,13 +19,23 @@ vmap LIB_BENCH $PROJECTNAME/LIB/LIB_BENCH
 
 echo "compile third party library  : type definition package"
 vcom -work LIB_AES $PROJECTNAME/SRC/THIRDPARTY/CryptPack.vhd
+vcom -work LIB_AES $PROJECTNAME/SRC/THIRDPARTY/KeyExpansion_I_O_table.vhd
 
 echo "compile vhdl sources"
 vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/sbox.vhd
 vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/subbytes.vhd
+vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/subbytes_conf.vhd
 vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/shiftrows.vhd
 vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/addroundkey.vhd
+vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/mixcolumn.vhd
 vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/mixcolumns.vhd
+vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/mixcolumns_conf.vhd
+vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/register_d.vhd
+vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/bit128_to_state.vhd
+vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/state_to_bit128.vhd
+vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/round.vhd
+vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/round_conf.vhd
+vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/counter.vhd
 
 echo "compile vhdl test bench"
 vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/sbox_tb.vhd
@@ -36,12 +46,19 @@ vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/shiftrows_tb.vhd
 vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/shiftrows_tb_conf.vhd
 vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/addroundkey_tb.vhd
 vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/addroundkey_tb_conf.vhd
+vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/mixcolumn_tb.vhd
+vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/mixcolumn_tb_conf.vhd
 vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/mixcolumns_tb.vhd
 vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/mixcolumns_tb_conf.vhd
+vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/register_d_tb.vhd
+vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/register_d_tb_conf.vhd
+vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/bit128_to_state_tb.vhd
+vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/bit128_to_state_tb_conf.vhd
+vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/state_to_bit128_tb.vhd
+vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/state_to_bit128_tb_conf.vhd
+vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/round_tb.vhd
+vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/round_tb_conf.vhd
+vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/counter_tb.vhd
+vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/counter_tb_conf.vhd
 
 echo "compilation finished"
-# echo "start simulation..."
-# vsim  LIB_BENCH.SBox_I_O_tb &
-
-
-

@@ -1,5 +1,11 @@
 # Rapport du projet de Programmation Système
 
+TODO: Not all test
+
+TODO: Legend graph
+
+TODO: Graph renvoi dans le texte
+
 [TOC]
 
 ## Plan

@@ -34,6 +34,7 @@ architecture mixcolumns_arch of mixcolumns is
 
 begin
 
+  --
   rows_order_i: for i in 0 to 3 generate
     columns_order_i: for j in 0 to 3 generate
       columns_i_s(j)(i) <= data_i(i)(j);

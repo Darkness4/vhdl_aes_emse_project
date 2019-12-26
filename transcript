@@ -11,80 +11,89 @@
 # //  is prohibited from disclosure under the Trade Secrets Act,
 # //  18 U.S.C. Section 1905.
 # //
-vsim -voptargs=+acc LIB_BENCH.round_tb_conf
-# vsim -voptargs="+acc" LIB_BENCH.round_tb_conf 
-# Start time: 13:52:14 on Dec 18,2019
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+vsim -voptargs=+acc LIB_BENCH.aes_tb_conf
+# vsim -voptargs="+acc" LIB_BENCH.aes_tb_conf 
+# Start time: 17:55:25 on Dec 18,2019
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Note: (vopt-143) Recognized 1 FSM in architecture body "fsm_aes(fsm_aes_arch)".
 # Loading std.standard
 # Loading std.textio(body)
 # Loading ieee.std_logic_1164(body)
 # Loading lib_aes.crypt_pack(body)
-# Loading work.round_tb_conf#1
-# Loading work.round_tb(round_tb_arch)#1
+# Loading ieee.numeric_std(body)
+# Loading work.aes_tb_conf#1
+# Loading work.aes_tb(aes_tb_arch)#1
+# Loading lib_rtl.aes_conf#1
+# Loading lib_rtl.aes(aes_arch)#1
+# Loading lib_aes.keyexpansion_i_o_table(keyexpansion_i_o_table_arch)#1
+# Loading lib_rtl.counter(counter_arch)#1
+# Loading lib_rtl.fsm_aes(fsm_aes_arch)#1
+# Loading lib_rtl.round_conf#1
 # Loading lib_rtl.round(round_arch)#1
 # Loading lib_rtl.bit128_to_state(bit128_to_state_arch)#1
 # Loading lib_rtl.addroundkey(addroundkey_arch)#1
 # Loading lib_rtl.register_d(register_d_arch)#1
 # Loading lib_rtl.state_to_bit128(state_to_bit128_arch)#1
+# Loading lib_rtl.subbytes_conf#1
 # Loading lib_rtl.subbytes(subbytes_arch)#1
-# Loading ieee.numeric_std(body)
 # Loading lib_rtl.sbox(sbox_arch)#1
 # Loading lib_rtl.shiftrows(shiftrows_arch)#1
+# Loading lib_rtl.mixcolumns_conf#1
 # Loading lib_rtl.mixcolumns(mixcolumns_arch)#1
 # Loading lib_rtl.mixcolumn(mixcolumn_arch)#1
-add wave -position insertpoint  \
-sim:/round_tb/DUT/text_i \
-sim:/round_tb/DUT/current_key_i \
-sim:/round_tb/DUT/clk_i \
-sim:/round_tb/DUT/resetb_i \
-sim:/round_tb/DUT/enable_round_computing_i \
-sim:/round_tb/DUT/enable_mix_columns_i \
-sim:/round_tb/DUT/cipher_o \
-sim:/round_tb/DUT/text_state_s \
-sim:/round_tb/DUT/cipher_state_s \
-sim:/round_tb/DUT/output_MC_s \
-sim:/round_tb/DUT/input_ARK_s \
-sim:/round_tb/DUT/output_ARK_s \
-sim:/round_tb/DUT/output_SB_s \
-sim:/round_tb/DUT/output_SR_s \
-sim:/round_tb/DUT/current_key_s
+add wave -position end  sim:/aes_tb/DUT/clock_i
+add wave -position end  sim:/aes_tb/DUT/resetb_i
+add wave -position end  sim:/aes_tb/DUT/start_i
+add wave -position end  sim:/aes_tb/DUT/text_i
+add wave -position end  sim:/aes_tb/DUT/aes_on_o
+add wave -position end  sim:/aes_tb/DUT/cipher_o
+add wave -position end  sim:/aes_tb/DUT/round_s
+add wave -position end  sim:/aes_tb/DUT/init_counter_s
+add wave -position end  sim:/aes_tb/DUT/start_counter_s
+add wave -position end  sim:/aes_tb/DUT/enable_round_computing_s
+add wave -position end  sim:/aes_tb/DUT/enable_mix_columns_s
+add wave -position end  sim:/aes_tb/DUT/enable_output_s
+add wave -position end  sim:/aes_tb/DUT/current_key_s
+add wave -position end  sim:/aes_tb/DUT/cipher_s
 # ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
 #           File in use by: nguye  Hostname: PC-DARKNESS4  ProcessID: 11836
-#           Attempting to use alternate WLF file "./wlftfygkzb".
+#           Attempting to use alternate WLF file "./wlft4wsbsf".
 # ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlftfygkzb
+#           Using alternate file: ./wlft4wsbsf
 run -all
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /round_tb/DUT/subbytes_instance/S_row(3)/S_case(3)/box
+#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(3)/S_case(3)/box
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /round_tb/DUT/subbytes_instance/S_row(3)/S_case(2)/box
+#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(3)/S_case(2)/box
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /round_tb/DUT/subbytes_instance/S_row(3)/S_case(1)/box
+#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(3)/S_case(1)/box
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /round_tb/DUT/subbytes_instance/S_row(3)/S_case(0)/box
+#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(3)/S_case(0)/box
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /round_tb/DUT/subbytes_instance/S_row(2)/S_case(3)/box
+#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(2)/S_case(3)/box
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /round_tb/DUT/subbytes_instance/S_row(2)/S_case(2)/box
+#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(2)/S_case(2)/box
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /round_tb/DUT/subbytes_instance/S_row(2)/S_case(1)/box
+#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(2)/S_case(1)/box
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /round_tb/DUT/subbytes_instance/S_row(2)/S_case(0)/box
+#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(2)/S_case(0)/box
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /round_tb/DUT/subbytes_instance/S_row(1)/S_case(3)/box
+#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(1)/S_case(3)/box
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /round_tb/DUT/subbytes_instance/S_row(1)/S_case(2)/box
+#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(1)/S_case(2)/box
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /round_tb/DUT/subbytes_instance/S_row(1)/S_case(1)/box
+#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(1)/S_case(1)/box
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /round_tb/DUT/subbytes_instance/S_row(1)/S_case(0)/box
+#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(1)/S_case(0)/box
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /round_tb/DUT/subbytes_instance/S_row(0)/S_case(3)/box
+#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(0)/S_case(3)/box
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /round_tb/DUT/subbytes_instance/S_row(0)/S_case(2)/box
+#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(0)/S_case(2)/box
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /round_tb/DUT/subbytes_instance/S_row(0)/S_case(1)/box
+#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(0)/S_case(1)/box
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /round_tb/DUT/subbytes_instance/S_row(0)/S_case(0)/box
-# End time: 13:53:36 on Dec 18,2019, Elapsed time: 0:01:22
-# Errors: 0, Warnings: 18
+#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(0)/S_case(0)/box
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/KeyExpansion_I_O_instance
+# End time: 17:55:45 on Dec 18,2019, Elapsed time: 0:00:20
+# Errors: 0, Warnings: 19

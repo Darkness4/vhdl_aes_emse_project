@@ -31,7 +31,7 @@ architecture counter_tb_arch of counter_tb is
   signal resetb_i_s: std_logic;
   signal init_counter_i_s: std_logic;
   signal start_counter_i_s: std_logic;
-  signal round_o_s: bit4
+  signal round_o_s: bit4;
 
 begin
 

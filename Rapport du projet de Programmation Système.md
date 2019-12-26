@@ -22,14 +22,6 @@ TODO: Decrire principe
 
 [TODO Image SBox]
 
-La SBox possède comme **entrée** :
-
-- un bus 8 bits que l'on nomme `data_i`, de type `bit8` [TODO: Lien vers Annexe].
-
-La SBox possède comme **sortie** :
-
-- un bus 8 bits que l'on nomme `data_o` de type `bit8` [TODO: Lien vers Annexe]
-
 VHDL :
 
 ```vhdl
@@ -131,14 +123,6 @@ TODO: Validation.
 ### SubBytes Entity
 
 [TODO Image SubBytes]
-
-La SubBytes possède comme **entrée** :
-
-- la matrice d'état en entrée que l'on nomme `data_i`, de type `type_state` [TODO: Lien vers Annexe].
-
-La SubBytes possède comme **sortie** :
-
-- la matrice d'état future que l'on nomme `data_o` de type `type_state` [TODO: Lien vers Annexe]
 
 VHDL :
 
@@ -244,14 +228,6 @@ Le décalagé dépend de l'incide (0...3) de la ligne.
 
 [TODO Image ShiftRows]
 
-La ShiftRows possède comme **entrée** :
-
-- la matrice d'état en entrée que l'on nomme `data_i`, de type `type_state` [TODO: Lien vers Annexe].
-
-La ShiftRows possède comme **sortie** :
-
-- la matrice d'état future que l'on nomme `data_o` de type `type_state` [TODO: Lien vers Annexe]
-
 VHDL :
 
 ```vhdl
@@ -326,108 +302,6 @@ TODO: Validation
 
 ## MixColumns
 
-### Component MixColumn
-
-#### Entity
-
-[TODO Image MixColumns]
-
-La MixColumns possède comme **entrée** :
-
-- une colonne de la matrice d'état que l'on nomme `data_i`, de type `column_state` [TODO: Lien vers Annexe].
-
-La MixColumns possède comme **sortie** :
-
-- la matrice d'état future que l'on nomme `data_o` de type `column_state` [TODO: Lien vers Annexe]
-
-VHDL :
-
-```vhdl
-entity mixcolumn is
-
-  port (
-    data_i: in column_state;
-    data_o: out column_state
-  );
-
-end entity mixcolumn;
-```
-
-#### Architecture
-
-```vhdl
-architecture mixcolumn_arch of mixcolumn is
-  
-begin
-
-  data_o(0) <= std_logic_vector(
-    (unsigned(data_i(0))*2) xor 
-    (unsigned(data_i(1))*3) xor
-    (unsigned(data_i(2))*1) xor
-    (unsigned(data_i(3))*1) xor
-    unsigned(("000" & data_i(7) & 
-     data_i(7) & "0" & data_i(7) & data_i(7)))
-  );
-  data_o(1) <= std_logic_vector(
-    (unsigned(data_i(0))*1) xor 
-    (unsigned(data_i(1))*2) xor
-    (unsigned(data_i(2))*3) xor
-    (unsigned(data_i(3))*1) xor
-    unsigned(("000" & data_i(7) & 
-     data_i(7) & "0" & data_i(7) & data_i(7)))
-  );
-  data_o(2) <= std_logic_vector(
-    (unsigned(data_i(0))*1) xor 
-    (unsigned(data_i(1))*1) xor
-    (unsigned(data_i(2))*2) xor
-    (unsigned(data_i(3))*3) xor
-    unsigned(("000" & data_i(7) & 
-     data_i(7) & "0" & data_i(7) & data_i(7)))
-  );
-  data_o(3) <= std_logic_vector(
-    (unsigned(data_i(0))*3) xor 
-    (unsigned(data_i(1))*1) xor
-    (unsigned(data_i(2))*1) xor
-    (unsigned(data_i(3))*2) xor
-    unsigned(("000" & data_i(7) & 
-     data_i(7) & "0" & data_i(7) & data_i(7))) 
-  );
-
-end architecture mixcolumn_arch;
-```
-
-#### Testbench
-
-### MixColumns Entity
-
-[TODO Image MixColumns]
-
-La MixColumns possède comme **entrée** :
-
-- la matrice d'état en entrée que l'on nomme `data_i`, de type `type_state` [TODO: Lien vers Annexe].
-- `enable_i`, de type ``, qui permet :
-  - Si `enable = 1`, `data_out <= mixcolumns(data_i)`
-  - Sinon, `data_out <= data_i`, afin que l'on désactive lors du round final.
-
-La MixColumns possède comme **sortie** :
-
-- la matrice d'état future que l'on nomme `data_o` de type `type_state` [TODO: Lien vers Annexe]
-
-VHDL :
-
-```vhdl
-entity mixcolumns is
-
-  port (
-    data_i: in type_state;
-    data_o: out type_state
-  );
-
-end entity mixcolumns;
-```
-
-### MixColumns Architecture
-
 TODO: Meilleure rédaction
 
 **Cas 1 : Bit de poids fort = 0**
@@ -461,6 +335,97 @@ XOR
 ```
 
 data_i (column_state)=>[MixColumn]=>data_o(column_state)
+
+### Component MixColumn
+
+
+
+#### Entity
+
+[TODO Image MixColumns]
+
+VHDL :
+
+```vhdl
+entity mixcolumn is
+
+  port (
+    data_i: in column_state;
+    data_o: out column_state
+  );
+
+end entity mixcolumn;
+```
+
+#### Architecture
+
+```vhdl
+architecture mixcolumn_arch of mixcolumn is
+
+  signal data2_s: column_state;
+  signal data3_s: column_state;
+
+begin
+
+  data2_s <= (
+    std_logic_vector((unsigned(data_i(0)(6 downto 0)) & "0") xor
+      ("000" & data_i(0)(7) & data_i(0)(7) & "0" & data_i(0)(7) & data_i(0)(7))),
+    std_logic_vector((unsigned(data_i(1)(6 downto 0)) & "0") xor
+      ("000" & data_i(1)(7) & data_i(1)(7) & "0" & data_i(1)(7) & data_i(1)(7))),
+    std_logic_vector((unsigned(data_i(2)(6 downto 0)) & "0") xor
+      ("000" & data_i(2)(7) & data_i(2)(7) & "0" & data_i(2)(7) & data_i(2)(7))),
+    std_logic_vector((unsigned(data_i(3)(6 downto 0)) & "0") xor
+      ("000" & data_i(3)(7) & data_i(3)(7) & "0" & data_i(3)(7) & data_i(3)(7)))
+  );
+  data3_s <= (
+    data2_s(0) xor data_i(0),
+    data2_s(1) xor data_i(1),
+    data2_s(2) xor data_i(2),
+    data2_s(3) xor data_i(3)
+  );
+
+  data_o(0) <= data2_s(0) xor data3_s(1) xor data_i(2) xor data_i(3);
+  data_o(1) <= data_i(0) xor data2_s(1) xor data3_s(2) xor data_i(3);
+  data_o(2) <= data_i(0) xor data_i(1) xor data2_s(2) xor data3_s(3);
+  data_o(3) <= data3_s(0) xor data_i(1) xor data_i(2) xor data2_s(3);
+
+end architecture mixcolumn_arch;
+```
+
+#### Testbench
+
+### MixColumns Entity
+
+[TODO Image MixColumns]
+
+La MixColumns possède comme **entrée** :
+
+- la matrice d'état en entrée que l'on nomme `data_i`, de type `type_state` [TODO: Lien vers Annexe].
+- `enable_i`, de type `std_logic`, qui permet :
+  - Si `enable = 1`, `data_out <= mixcolumns(data_i)`
+  - Sinon, `data_out <= data_i`, afin que l'on désactive lors du round final.
+
+La MixColumns possède comme **sortie** :
+
+- la matrice d'état future que l'on nomme `data_o` de type `type_state` [TODO: Lien vers Annexe]
+
+VHDL :
+
+```vhdl
+entity mixcolumns is
+
+  port (
+    data_i: in type_state;
+    enable_i: in std_logic;
+    data_o: out type_state
+  );
+
+end entity mixcolumns;
+```
+
+### MixColumns Architecture
+
+
 
 TODO: VHDL
 
@@ -602,9 +567,302 @@ Il faudra mémoriser après un AddRoundKey.
 
 Il faut entrer la subkey, text clair.
 
+### Component Registre D
+
+Le registre D permettra de cadencer notre round et de synchroniser avec un compteur de round et une machine d'état.
+
+#### Entity
+
+```vhdl
+entity register_d is
+
+  port (
+    resetb_i : in std_logic;
+    clock_i : in std_logic;
+    state_i : in type_state;
+    state_o : out type_state
+  );
+
+end entity register_d;
+```
+
+#### Architecture
+
+On adapte notre registre D au type `state`.
+
+```vhdl
+architecture register_d_arch of register_d is
+
+  signal state_s : type_state;
+
+begin
+
+  seq_0 : process (clock_i, resetb_i) is
+
+  begin
+
+    -- Reset clears state
+    if resetb_i = '0' then
+      for i in 0 to 3 loop
+        for j in 0 to 3 loop
+          state_s(i)(j) <= (others => '0');
+        end loop;
+      end loop;
+
+    -- New data at RISING
+    elsif clock_i'event and clock_i='1' then
+      state_s <= state_i;
+    end if;
+
+  end process seq_0;
+
+  -- Output
+  state_o <= state_s;
+
+end architecture register_d_arch;
+```
+
+#### TestBench
+
+
+
 ### Round Entity
+
+[TODO Image Entity]
+
+Le Round possède comme **entrée** :
+
+- Le texte clair que l'on nomme `text_i`, de type `bit128` [TODO: Lien vers Annexe].
+- La sous-clé en entrée que l'on nomme `current_key_i`, de type `bit128` [TODO: Lien vers Annexe].
+- L'horloge `clock_i` en `std_logic` et le reset `resetb_i` (reset si le niveau est bas)
+- `enable_round_computing_i` en `std_logic` qui servira de choisir l'entrée entre le texte clair pour le round 0, ou les résultats des précédant round.
+- `enable_mix_columns_i` qui servira de d'activer/désactiver MixColumns pour le Round 0 et Round 10
+
+Le round possède comme **sortie** :
+
+- Le texte chiffré du round que l'on nomme `cipher_o` de type `bit128` [TODO: Lien vers Annexe]
+
+```vhdl
+entity round is
+
+  port (
+    text_i: in bit128;
+    current_key_i: in bit128;
+    clock_i: in std_logic;
+    resetb_i: in std_logic;
+    enable_round_computing_i: in std_logic;
+    enable_mix_columns_i: in std_logic;
+    cipher_o: out bit128
+  );
+
+end entity round;
+```
+
+### Round Architecture
+
+D'après la documentation de l'AES, un round est composé de :
+
+[TODO IMAGE]
+
+On utilisera un registre D pour synchroniser notre composant `round ` avec le compteur de round et une machine d'état.
+
+Egalement, comme nos entrées sont des `bit128` et que notre architecture se base sur des `state`, on convertira les `bits128` en entrée en `state`, et les `state` en sortie en `bit128`
+
+On prévoit donc notre architecture VHDL :
+
+![image-20191226150734997](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20191226150734997.png)
+
+On connecte donc nos différents composants en VHDL :
+
+```vhdl
+architecture round_arch of round is
+
+  ...  -- Composants et signals affichés dans le schéma
+
+begin
+
+  text_bit128_to_state: bit128_to_state
+    port map(
+      data_i => text_i,
+      data_o => text_state_s
+    );
+
+
+  -- demux
+  input_ARK_s <= output_MC_s when enable_round_computing_i = '1' else text_state_s;
+
+  current_key_bit128_to_state: bit128_to_state
+    port map(
+      data_i => current_key_i,
+      data_o => current_key_s
+    );
+
+  addroundkey_instance: addroundkey
+    port map(
+      data_i => input_ARK_s,
+      key_i => current_key_s,
+      data_o => output_ARK_s
+    );
+
+  register_d_instance: register_d
+    port map(
+      resetb_i => resetb_i,
+      clock_i => clock_i,
+      state_i => output_ARK_s,
+      state_o => cipher_state_s
+    );
+
+  cipher_to_bit128: state_to_bit128
+    port map(
+      data_i => cipher_state_s,
+      data_o => cipher_o
+    );
+
+  subbytes_instance: subbytes
+    port map(
+      data_i => cipher_state_s,
+      data_o => output_SB_s
+    );
+
+  shiftrows_instance: shiftrows
+    port map(
+      data_i => output_SB_s,
+      data_o => output_SR_s
+    );
+
+  mixcolumns_instance: mixcolumns
+    port map(
+      data_i => output_SR_s,
+      data_o => output_MC_s,
+      enable_i => enable_mix_columns_i
+    );
+
+end architecture round_arch;
+```
+
+### Round TestBench
+
+## Machine d'Etat
+
+La machine d'état contrôle le comportement du round en fonction du compteur de round.
+
+![image-20191226155750386](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20191226155750386.png)
+
+Voici donc la configuration des données en fonction des états :
+
+|                 | idle  | start_counter | round_0 | round_1to9 | round10 | end_fsm |
+| :-------------: | :---: | :-----------: | :-----: | :--------: | :-----: | :-----: |
+| init_counter_o  | **1** |     **1**     |    0    |     0      |    0    |    0    |
+| start_counter_o |   0   |     **1**     |  **1**  |   **1**    |    0    |    0    |
+| enable_output_o |   0   |       0       |    0    |     0      |    0    |  **1**  |
+|    aes_on_o     |   0   |       0       |  **1**  |   **1**    |  **1**  |    0    |
+|   enable_RC_o   |   0   |       0       |    0    |   **1**    |  **1**  |    0    |
+|   enable_MC_o   |   0   |       0       |    0    |   **1**    |    0    |    0    |
+
+### Machine d'Etat Entity
+
+D'après le diagramme d'état, on définit rapidement les entrées et les sorties :
+
+```vhdl
+entity fsm_aes is
+
+  port (
+    round_i: in bit4;  -- Utilise: 10, Max: 16
+    clock_i: in std_logic;
+    resetb_i: in std_logic;
+    start_i: in std_logic;
+    init_counter_o: out std_logic;
+    start_counter_o: out std_logic;
+    enable_output_o: out std_logic;
+    aes_on_o: out std_logic;
+    enable_round_computing_o: out std_logic;
+    enable_mix_columns_o: out std_logic
+  );
+
+end entity fsm_aes;
+```
+
+### Machine d'Etat Architecture
+
+Pour changer d'état en fonction de l'horloge et du reset, nous utiliserons un process dédié, sensible à l'horloge et au reset :
+
+```vhdl
+  event_dispatcher: process (clock_i, resetb_i)
+  begin
+    if resetb_i = '0' then
+      etat_present <= idle;
+    elsif clock_i'event and clock_i = '1' then
+      etat_present <= etat_futur;
+    end if;
+  end process event_dispatcher;
+```
+
+Pour changer d'état en fonction des entrées, nous utiliserons un autre process dédié, sensible à l'état présent, le start et le round :
+
+```vhdl
+  event_map_to_state: process (etat_present, start_i, round_i)
+  begin
+    case etat_present is
+      when idle =>
+        if start_i = '0' then
+          etat_futur <= idle;  -- loop until start
+        else
+          etat_futur <= start_counter;
+        end if;
+      when start_counter =>
+        etat_futur <= round_0;
+      when round_0 =>
+        etat_futur <= round_1to9;
+      when round_1to9 =>
+        if to_integer(unsigned(round_i)) < 9 then
+          etat_futur <= round_1to9;  -- loop while round_i < 9
+        else
+          etat_futur <= round10;
+        end if;
+      when round10 =>
+        etat_futur <= end_fsm;
+      when end_fsm =>
+        etat_futur <= idle;
+    end case;
+  end process event_map_to_state;
+```
+
+Pour changer les données en fonction de l'état :
+
+```vhdl
+state_model: process (etat_present)
+  begin
+    case etat_present is
+      when idle =>
+        init_counter_o <= '1';
+        start_counter_o <= '0';
+        enable_output_o <= '0';
+        aes_on_o <= '0';
+        enable_round_computing_o <= '0';
+        enable_mix_columns_o <= '0';
+      ... -- Le comportement est défini dans le tableau ci-dessus.
+      when end_fsm =>
+        init_counter_o <= '0';
+        start_counter_o <= '0';
+        enable_output_o <= '1';
+        aes_on_o <= '0';
+        enable_round_computing_o <= '0';
+        enable_mix_columns_o <= '0';
+    end case;
+  end process state_model;
+```
+
+### Machine d'Etat TestBench 
+
+## Compteur de Round
+
+## AES
 
 
 
 # Bibliographie
+
+# Annexe
+
+
 

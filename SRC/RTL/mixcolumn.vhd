@@ -26,10 +26,14 @@ architecture mixcolumn_arch of mixcolumn is
 begin
 
   data2_s <= (
-    std_logic_vector((unsigned(data_i(0)(6 downto 0)) & "0") xor ("000" & data_i(0)(7) & data_i(0)(7) & "0" & data_i(0)(7) & data_i(0)(7))),
-    std_logic_vector((unsigned(data_i(1)(6 downto 0)) & "0") xor ("000" & data_i(1)(7) & data_i(1)(7) & "0" & data_i(1)(7) & data_i(1)(7))),
-    std_logic_vector((unsigned(data_i(2)(6 downto 0)) & "0") xor ("000" & data_i(2)(7) & data_i(2)(7) & "0" & data_i(2)(7) & data_i(2)(7))),
-    std_logic_vector((unsigned(data_i(3)(6 downto 0)) & "0") xor ("000" & data_i(3)(7) & data_i(3)(7) & "0" & data_i(3)(7) & data_i(3)(7)))
+    std_logic_vector((unsigned(data_i(0)(6 downto 0)) & "0") xor
+      ("000" & data_i(0)(7) & data_i(0)(7) & "0" & data_i(0)(7) & data_i(0)(7))),
+    std_logic_vector((unsigned(data_i(1)(6 downto 0)) & "0") xor
+      ("000" & data_i(1)(7) & data_i(1)(7) & "0" & data_i(1)(7) & data_i(1)(7))),
+    std_logic_vector((unsigned(data_i(2)(6 downto 0)) & "0") xor
+      ("000" & data_i(2)(7) & data_i(2)(7) & "0" & data_i(2)(7) & data_i(2)(7))),
+    std_logic_vector((unsigned(data_i(3)(6 downto 0)) & "0") xor
+      ("000" & data_i(3)(7) & data_i(3)(7) & "0" & data_i(3)(7) & data_i(3)(7)))
   );
   data3_s <= (
     data2_s(0) xor data_i(0),

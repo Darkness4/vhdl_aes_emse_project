@@ -1,8 +1,12 @@
 #!/bin/bash
 
-export PROJECTNAME=$(dirname $(realpath $0))
+export PROJECTNAME='.'
 
 # TO DO : test $PROJECTNAME
+mkdir -p $PROJECTNAME/LIB/LIB_AES
+mkdir -p $PROJECTNAME/LIB/LIB_RTL
+mkdir -p $PROJECTNAME/LIB/LIB_BENCH
+
 echo "the project location is : $PROJECTNAME"
 echo "removing libs : folder plus line declaration in Modelsim.ini file"
 vdel -lib $PROJECTNAME/LIB/LIB_AES -all
@@ -36,6 +40,9 @@ vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/state_to_bit128.vhd
 vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/round.vhd
 vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/round_conf.vhd
 vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/counter.vhd
+vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/fsm_aes.vhd
+vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/aes.vhd
+vcom -work LIB_RTL $PROJECTNAME/SRC/RTL/aes_conf.vhd
 
 echo "compile vhdl test bench"
 vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/sbox_tb.vhd
@@ -60,5 +67,8 @@ vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/round_tb.vhd
 vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/round_tb_conf.vhd
 vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/counter_tb.vhd
 vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/counter_tb_conf.vhd
-
+vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/fsm_aes_tb.vhd
+vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/fsm_aes_tb_conf.vhd
+vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/aes_tb.vhd
+vcom -work LIB_BENCH $PROJECTNAME/SRC/BENCH/aes_tb_conf.vhd
 echo "compilation finished"

@@ -1,4 +1,4 @@
-# Rapport du projet de Programmation Système
+# Rapport du projet AES VHDL
 
 TODO: Not all test
 
@@ -21,8 +21,6 @@ TODO: Decrire principe
 #### Entity
 
 [TODO Image SBox]
-
-VHDL :
 
 ```vhdl
 entity sbox is
@@ -51,13 +49,11 @@ architecture sbox_arch of sbox is
 begin
 ```
 
-**Dans la partie descriptive de l'architecture de SBox**, on envoie l'image de `sbox_c` en fonction `data_i` à `data_o`. 
+**Dans la partie descriptive de l'architecture de SBox**, on envoie l'image de `sbox_c` à `data_o`. 
 
 Cependant, il faut noter que `data_i` est en `bit128`, c'est-à-dire, `std_logic_vector(127 downto 0)`. Comme l'opérateur `()` n'accepte que des `integer`, on utilise la librarie `ieee.numeric_stc.all` afin de convertir des `std_logic_vector` en `integer`.
 
 [TODO: Image de conversion]
-
-VHDL :
 
 ```vhdl
 -- Pour utiliser le type bit8
@@ -86,6 +82,10 @@ end architecture sbox_arch;
 ```
 
 #### Testbench
+
+En entrée : `x"00", x"1F" after 50 ns;`.
+
+On s'attend à obtenir [TODO]
 
 ```vhdl
 entity sbox_tb is
@@ -124,8 +124,6 @@ TODO: Validation.
 
 [TODO Image SubBytes]
 
-VHDL :
-
 ```vhdl
 entity subbytes is
 
@@ -139,7 +137,7 @@ end entity subbytes;
 
 ### SubBytes Architecture
 
-Ici, on va chercher à appliquer la SBox sur chaque octet de la état (16 octects) **de manière concurrente**. Par conséquent, on utilise 16 SBox par octet.
+Ici, on va chercher à appliquer la SBox sur chaque octet de l'état (16 octets) **de manière concurrente**. Par conséquent, on utilise 16 SBox par octet.
 
 [Schéma 16 octets aligné vertical, flèche vers Sbox, sortie]
 
@@ -159,8 +157,6 @@ begin
 ```
 
 **Dans la partie descriptive de l'architecture  de SubBytes**, on génère 1 `sbox` par case, et on fait entrer la `data_i` et sortir la `data_o` correspondant.
-
-VHDL :
 
 ```vhdl
 begin
@@ -218,9 +214,9 @@ TODO: Validation
 
 ## ShiftRows
 
-ShiftRows doit permter les octets de chaque ligne de l'état.
+ShiftRows doit permuter les octets de chaque ligne de l'état.
 
-Le décalagé dépend de l'incide (0...3) de la ligne.
+Le décalage dépend de indice (0...3) de la ligne.
 
 [TODO Image]
 
@@ -338,11 +334,11 @@ data_i (column_state)=>[MixColumn]=>data_o(column_state)
 
 ### Component MixColumn
 
-
+[TODO]
 
 #### Entity
 
-[TODO Image MixColumns]
+[TODO Image MixColumn]
 
 VHDL :
 
@@ -784,9 +780,23 @@ end entity fsm_aes;
 
 ### Machine d'Etat Architecture
 
+**Dans la partie déclarative**, on définit nos états : 
+
+```vhdl
+architecture fsm_aes_arch of fsm_aes is
+
+  type state_fsm is (idle, start_counter, round_0, round_1to9, round10, end_fsm);
+  signal etat_present, etat_futur: state_fsm;
+
+begin
+```
+
+**Dans la partie descriptive**, on définit 3 process.
+
 Pour changer d'état en fonction de l'horloge et du reset, nous utiliserons un process dédié, sensible à l'horloge et au reset :
 
 ```vhdl
+-- architecture fsm_aes_arch
   event_dispatcher: process (clock_i, resetb_i)
   begin
     if resetb_i = '0' then
@@ -800,6 +810,7 @@ Pour changer d'état en fonction de l'horloge et du reset, nous utiliserons un p
 Pour changer d'état en fonction des entrées, nous utiliserons un autre process dédié, sensible à l'état présent, le start et le round :
 
 ```vhdl
+-- architecture fsm_aes_arch
   event_map_to_state: process (etat_present, start_i, round_i)
   begin
     case etat_present is
@@ -827,10 +838,11 @@ Pour changer d'état en fonction des entrées, nous utiliserons un autre process
   end process event_map_to_state;
 ```
 
-Pour changer les données en fonction de l'état :
+Pour changer les données en fonction de l'état, nous utiliserons également un process dédié, sensible à l'état présent :
 
 ```vhdl
-state_model: process (etat_present)
+-- architecture fsm_aes_arch
+  state_model: process (etat_present)
   begin
     case etat_present is
       when idle =>
@@ -855,6 +867,65 @@ state_model: process (etat_present)
 ### Machine d'Etat TestBench 
 
 ## Compteur de Round
+
+Notre compteur doit aller de 0 à 10, on utilise donc un compteur 4 bits.
+
+### Compteur de Round Entity
+
+Notre compteur devra être armé avec `init_counter_i`, et devra s'incrémenter dès que le `start_counter_i` passe à 1.
+
+```vhdl
+entity counter is
+
+  port (
+    clock_i: in std_logic;
+    resetb_i: in std_logic;
+    init_counter_i: in std_logic;
+    start_counter_i: in std_logic;
+    round_o: out bit4
+  );
+
+end entity counter;
+```
+
+### Compteur de Round Architecture
+
+```vhdl
+architecture counter_arch of counter is
+
+  signal round_s : bit4;
+
+begin
+
+  seq_0 : process (clock_i, resetb_i) is
+  begin
+    -- Reset clears state
+    if resetb_i = '0' then
+      round_s <= "0000";
+    
+    -- New data at RISING
+    elsif clock_i'event and clock_i = '1' then
+      -- Arm
+      if init_counter_i = '1' then
+        round_s <= "0000";
+        
+      -- Start counting
+      elsif start_counter_i = '1' then
+        if round_s = "1010" then  -- Limit
+          round_s <= "0000";
+        else
+          round_s <= std_logic_vector(unsigned(round_s) + 1);
+        end if;
+      end if;
+    end if;
+  end process seq_0;
+
+  round_o <= round_s;
+
+end architecture counter_arch;
+```
+
+### Compteur de Round TestBench
 
 ## AES
 

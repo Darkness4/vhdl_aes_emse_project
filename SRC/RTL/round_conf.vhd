@@ -15,6 +15,9 @@ configuration round_conf of round is
     for all: shiftrows
       use entity lib_rtl.shiftrows(shiftrows_arch);
     end for;
+    for all: register_d
+      use entity lib_rtl.register_d(register_d_arch);
+    end for;
     for all: subbytes
       use configuration lib_rtl.subbytes_conf;
     end for;

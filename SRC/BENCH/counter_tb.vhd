@@ -4,6 +4,8 @@
 
 library ieee;
 use ieee.std_logic_1164.std_logic;
+use ieee.std_logic_1164.std_logic_vector;
+use ieee.numeric_std.all;
 
 library lib_aes;
 use lib_aes.crypt_pack.bit4;
@@ -43,29 +45,51 @@ begin
     round_o => round_o_s
   );
 
-  -- Stimuli
-  clock_i_s <= '0', '1' after 50 ns,
-               '0' after 100 ns, '1' after 150 ns,
-               '0' after 200 ns, '1' after 250 ns,
-               '0' after 300 ns, '1' after 350 ns,
-               '0' after 400 ns, '1' after 450 ns,
-               '0' after 500 ns, '1' after 550 ns,
-               '0' after 600 ns, '1' after 650 ns,
-               '0' after 700 ns, '1' after 750 ns,
-               '0' after 800 ns, '1' after 850 ns,
-               '0' after 900 ns, '1' after 950 ns,
-               '0' after 1000 ns, '1' after 1050 ns,
-               '0' after 1100 ns, '1' after 1150 ns,
-               '0' after 1200 ns, '1' after 1250 ns,
-               '0' after 1300 ns, '1' after 1350 ns,
-               '0' after 1400 ns, '1' after 1450 ns,
-               '0' after 1500 ns, '1' after 1550 ns,
-               '0' after 1600 ns, '1' after 1650 ns,
-               '0' after 1700 ns, '1' after 1750 ns,
-               '0' after 1800 ns, '1' after 1850 ns;
+  clock: process
+  begin
+    clock_i_s <= '0';
+    wait for 50 ns;
+    clock_i_s <= '1';
+    wait for 50 ns;
+  end process clock;
 
   resetb_i_s <= '0', '1' after 140 ns;
-  init_counter_i_s <= '0', '1' after 140 ns, '0' after 340 ns;
-  start_counter_i_s <= '0', '1' after 140 ns;
+
+  -- Act (expected from FSM behavior)
+  init_counter_i_s <= '0', '1' after 150 ns, '0' after 450 ns, '1' after 1550 ns;
+  start_counter_i_s <= '0', '1' after 251 ns, '0' after 1450 ns;
+
+  test: process
+  begin
+    wait for 350 ns; -- t = 350 ns
+    for test_round in 0 to 10 loop
+      -- Assert
+      wait for 10 ns; -- t = 360 + i * 100 ns
+      assert unsigned(round_o_s)=test_round
+        report "Test has failed : round_o_s/=test_round"
+        severity error;
+      wait for 90 ns; -- t = 450 + i * 100 ns
+    end loop;
+
+    -- t = 1450 ns
+
+    wait for 10 ns; -- t = 1460 ns
+
+    -- Test: Counter shouldn't increase when start = 0
+    assert unsigned(round_o_s)=10
+      report "Test has failed : round_o_s/=0"
+      severity error;
+
+    wait for 100 ns; -- t = 1560 ns
+
+    -- Test : Counter should reset when init = 1
+    assert unsigned(round_o_s)=0
+      report "Test has failed : round_o_s/=0"
+      severity error;
+
+    -- End
+    wait for 5 ns;
+    assert false report "Simulation Finished" severity failure;
+  end process test;
 
 end architecture counter_tb_arch;

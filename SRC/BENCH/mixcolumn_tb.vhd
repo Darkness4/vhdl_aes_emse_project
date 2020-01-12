@@ -27,6 +27,9 @@ architecture mixcolumn_tb_arch of mixcolumn_tb is
   signal data_i_s: column_state;
   signal data_o_s: column_state;
 
+  -- Arrange
+  constant column_c: column_state := (x"a0", x"ae", x"2f", x"bc");
+
 begin
 
   DUT: mixcolumn port map(
@@ -34,7 +37,20 @@ begin
     data_o => data_o_s
   );
 
-  -- Stimuli
+  -- Act
   data_i_s <= (x"af", x"e6", x"01", x"d5");
+
+  test: process
+  begin
+    -- Assert
+    wait for 5 ns;
+    assert data_o_s = column_c
+      report "data_o_s /= column_c"
+      severity error;
+
+    -- End
+    wait for 5 ns;
+    assert false report "Simulation Finished" severity failure;
+  end process test;
 
 end architecture mixcolumn_tb_arch;

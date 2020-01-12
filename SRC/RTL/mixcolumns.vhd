@@ -34,13 +34,14 @@ architecture mixcolumns_arch of mixcolumns is
 
 begin
 
-  --
+  -- Slice Data_i in columns
   rows_order_i: for i in 0 to 3 generate
     columns_order_i: for j in 0 to 3 generate
       columns_i_s(j)(i) <= data_i(i)(j);
     end generate columns_order_i;
   end generate rows_order_i;
 
+  -- Apply MixColumn for each column
   columns_order: for j in 0 to 3 generate
     MC: mixcolumn port map(
       data_i => columns_i_s(j),
@@ -48,6 +49,7 @@ begin
     );
   end generate columns_order;
 
+  -- Restore state from new columns (or old columns depending enable_i)
   rows_order_o: for i in 0 to 3 generate
     columns_order_o: for j in 0 to 3 generate
       data_o(i)(j) <= columns_o_s(j)(i) when enable_i = '1' else data_i(i)(j);

@@ -13,14 +13,13 @@
 # //
 vsim -voptargs=+acc LIB_BENCH.aes_tb_conf
 # vsim -voptargs="+acc" LIB_BENCH.aes_tb_conf 
-# Start time: 16:01:08 on Dec 27,2019
-# ** Note: (vsim-3812) Design is being optimized...
-# ** Note: (vopt-143) Recognized 1 FSM in architecture body "fsm_aes(fsm_aes_arch)".
+# Start time: 01:57:36 on Jan 12,2020
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
 # Loading std.standard
 # Loading std.textio(body)
 # Loading ieee.std_logic_1164(body)
-# Loading lib_aes.crypt_pack(body)
 # Loading ieee.numeric_std(body)
+# Loading lib_aes.crypt_pack(body)
 # Loading work.aes_tb_conf#1
 # Loading work.aes_tb(aes_tb_arch)#1
 # Loading lib_rtl.aes_conf#1
@@ -41,87 +40,24 @@ vsim -voptargs=+acc LIB_BENCH.aes_tb_conf
 # Loading lib_rtl.mixcolumns_conf#1
 # Loading lib_rtl.mixcolumns(mixcolumns_arch)#1
 # Loading lib_rtl.mixcolumn(mixcolumn_arch)#1
-run -all
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(3)/S_case(3)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(3)/S_case(2)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(3)/S_case(1)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(3)/S_case(0)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(2)/S_case(3)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(2)/S_case(2)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(2)/S_case(1)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(2)/S_case(0)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(1)/S_case(3)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(1)/S_case(2)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(1)/S_case(1)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(1)/S_case(0)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(0)/S_case(3)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(0)/S_case(2)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(0)/S_case(1)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(0)/S_case(0)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/KeyExpansion_I_O_instance
 add wave -position end  sim:/aes_tb/text_i_s
+add wave -position end  sim:/aes_tb/cipher_o_s
+add wave -position end  sim:/aes_tb/cipher_c
 # ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
 #           File in use by: nguye  Hostname: PC-DARKNESS4  ProcessID: 11836
-#           Attempting to use alternate WLF file "./wlfty3axtj".
+#           Attempting to use alternate WLF file "./wlft2i4xqg".
 # ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlfty3axtj
-restart -f
-# ** Note: (vsim-8009) Loading existing optimized design _opt
-run -all
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(3)/S_case(3)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(3)/S_case(2)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(3)/S_case(1)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(3)/S_case(0)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(2)/S_case(3)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(2)/S_case(2)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(2)/S_case(1)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(2)/S_case(0)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(1)/S_case(3)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(1)/S_case(2)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(1)/S_case(1)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(1)/S_case(0)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(0)/S_case(3)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(0)/S_case(2)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(0)/S_case(1)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(0)/S_case(0)/box
-# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
-#    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/KeyExpansion_I_O_instance
+#           Using alternate file: ./wlft2i4xqg
+add wave -position end  sim:/aes_tb/clock_i_s
+add wave -position end  sim:/aes_tb/resetb_i_s
+add wave -position end  sim:/aes_tb/start_i_s
+add wave -position end  sim:/aes_tb/aes_on_o_s
+add wave -position end  sim:/aes_tb/text_i_s
 add wave -position end  sim:/aes_tb/cipher_o_s
-restart -f
-# ** Note: (vsim-8009) Loading existing optimized design _opt
+add wave -position end  sim:/aes_tb/cipher_c
+add wave -position end  sim:/aes_tb/DUT/round_s
+add wave -position end  sim:/aes_tb/DUT/fsm_aes_instance/etat_present
+add wave -position end  sim:/aes_tb/DUT/round_instance/cipher_o
 run -all
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
 #    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(3)/S_case(3)/box
@@ -157,21 +93,12 @@ run -all
 #    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/round_instance/subbytes_instance/S_row(0)/S_case(0)/box
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
 #    Time: 0 ns  Iteration: 0  Instance: /aes_tb/DUT/KeyExpansion_I_O_instance
-quit -sim
-# End time: 16:02:10 on Dec 27,2019, Elapsed time: 0:01:02
-# Errors: 0, Warnings: 17
-vsim -voptargs=+acc LIB_BENCH.counter_tb_conf
-# vsim -voptargs="+acc" LIB_BENCH.counter_tb_conf 
-# Start time: 16:25:48 on Dec 27,2019
-# ** Note: (vsim-3812) Design is being optimized...
-# Loading std.standard
-# Loading std.textio(body)
-# Loading ieee.std_logic_1164(body)
-# Loading lib_aes.crypt_pack(body)
-# Loading ieee.numeric_std(body)
-# Loading work.counter_tb_conf#1
-# Loading work.counter_tb(counter_tb_arch)#1
-# Loading lib_rtl.counter(counter_arch)#1
+# ** Failure: First Shot Finished
+#    Time: 1360 ns  Iteration: 0  Process: /aes_tb/test File: SRC/BENCH/aes_tb.vhd
+# Break in Process test at SRC/BENCH/aes_tb.vhd line 84
 run -all
-# End time: 16:26:50 on Dec 27,2019, Elapsed time: 0:01:02
-# Errors: 0, Warnings: 0
+# ** Failure: Second Shot Finished
+#    Time: 3065 ns  Iteration: 0  Process: /aes_tb/test File: SRC/BENCH/aes_tb.vhd
+# Break in Process test at SRC/BENCH/aes_tb.vhd line 102
+# End time: 02:26:19 on Jan 12,2020, Elapsed time: 0:28:43
+# Errors: 2, Warnings: 19

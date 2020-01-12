@@ -35,10 +35,9 @@ begin
       if init_counter_i = '1' then
         round_s <= "0000";
       elsif start_counter_i = '1' then
-        if round_s = "1010" then
+        round_s <= std_logic_vector(unsigned(round_s) + 1);
+        if round_s = "1011" then  -- if round > 10
           round_s <= "0000";
-        else
-          round_s <= std_logic_vector(unsigned(round_s) + 1);
         end if;
       end if;
     end if;

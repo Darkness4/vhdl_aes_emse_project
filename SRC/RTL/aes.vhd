@@ -118,7 +118,7 @@ begin
       cipher_o => cipher_s
     );
 
-  -- Demux
+  -- Mux
   cipher_o <= cipher_s when enable_output_s='1' else X"00000000000000000000000000000000";
 
 end architecture aes_arch;

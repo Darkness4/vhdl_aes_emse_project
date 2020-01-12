@@ -4,6 +4,8 @@
 
 library ieee;
 use ieee.std_logic_1164.std_logic;
+use ieee.std_logic_1164.std_logic_vector;
+use ieee.numeric_std.to_unsigned;
 
 library lib_aes;
 use lib_aes.crypt_pack.bit4;
@@ -32,16 +34,24 @@ architecture fsm_aes_tb_arch of fsm_aes_tb is
   end component;
 
   -- Signaux pour la simulation
+  subtype output_t is std_logic_vector(0 to 5);
   signal round_i_s: bit4;
   signal clock_i_s: std_logic;
   signal resetb_i_s: std_logic;
   signal start_i_s: std_logic;
-  signal init_counter_o_s: std_logic;
-  signal start_counter_o_s: std_logic;
-  signal enable_output_o_s: std_logic;
-  signal aes_on_o_s: std_logic;
-  signal enable_round_computing_o_s: std_logic;
-  signal enable_mix_columns_o_s: std_logic;
+  signal output_s: output_t;
+
+  -- Arrange
+  type order_t is array (0 to 5) of output_t;
+  constant order_of_output: order_t := (
+    -- init, start, enable_output, aes_on, enable_RC, enable_MC
+    ('1', '0', '0', '0', '0', '0'), -- idle
+    ('1', '1', '0', '0', '0', '0'), -- start
+    ('0', '1', '0', '1', '0', '0'), -- R0
+    ('0', '1', '0', '1', '1', '1'), -- R1to9
+    ('0', '0', '0', '1', '1', '0'), -- R10
+    ('0', '0', '1', '0', '0', '0')  -- end
+  );
 
 begin
 
@@ -50,49 +60,111 @@ begin
     clock_i => clock_i_s,
     resetb_i => resetb_i_s,
     start_i => start_i_s,
-    init_counter_o => init_counter_o_s,
-    start_counter_o => start_counter_o_s,
-    enable_output_o => enable_output_o_s,
-    aes_on_o => aes_on_o_s,
-    enable_round_computing_o => enable_round_computing_o_s,
-    enable_mix_columns_o => enable_mix_columns_o_s
+    init_counter_o => output_s(0),
+    start_counter_o => output_s(1),
+    enable_output_o => output_s(2),
+    aes_on_o => output_s(3),
+    enable_round_computing_o => output_s(4),
+    enable_mix_columns_o => output_s(5)
   );
 
-  -- Stimuli
-  clock_i_s <= '0', '1' after 50 ns,  -- idle
-               '0' after 100 ns, '1' after 150 ns,  -- Dispatch start 
-               '0' after 200 ns, '1' after 250 ns,  -- R0
-               '0' after 300 ns, '1' after 350 ns,  -- R1
-               '0' after 400 ns, '1' after 450 ns,  -- R2
-               '0' after 500 ns, '1' after 550 ns,  -- R3
-               '0' after 600 ns, '1' after 650 ns,  -- R4
-               '0' after 700 ns, '1' after 750 ns,  -- R5
-               '0' after 800 ns, '1' after 850 ns,  -- R6
-               '0' after 900 ns, '1' after 950 ns,  -- R7
-               '0' after 1000 ns, '1' after 1050 ns,  -- R8
-               '0' after 1100 ns, '1' after 1150 ns,  -- R9
-               '0' after 1200 ns, '1' after 1250 ns,  -- R10
-               '0' after 1300 ns, '1' after 1350 ns,
-               '0' after 1400 ns, '1' after 1450 ns,
-               '0' after 1500 ns, '1' after 1550 ns,
-               '0' after 1600 ns, '1' after 1650 ns,
-               '0' after 1700 ns, '1' after 1750 ns,
-               '0' after 1800 ns, '1' after 1850 ns;
+  clock: process
+  begin
+    clock_i_s <= '0';
+    wait for 50 ns;
+    clock_i_s <= '1';
+    wait for 50 ns;
+  end process clock;
 
   resetb_i_s <= '0', '1' after 40 ns;
-  start_i_s <= '0', '1' after 150 ns, '0' after 350 ns;
-  round_i_s <= "0000",
-             "0001" after 250 ns,  -- R0
-             "0010" after 350 ns,  -- R1
-             "0011" after 450 ns,  -- R2
-             "0100" after 550 ns,  -- R3
-             "0101" after 650 ns,  -- R4
-             "0110" after 750 ns,  -- R5
-             "0111" after 850 ns,  -- R6
-             "1000" after 950 ns,  -- R7
-             "1001" after 1050 ns,  -- R8
-             "1010" after 1150 ns,  -- R9
-             "1011" after 1250 ns,  -- R10
-             "1100" after 1350 ns;  -- R10
+
+  test: process
+  begin
+    -- Act
+    round_i_s <= "0000";
+    start_i_s <= '0';
+
+    -- Assert : Should be initial state
+    wait for 10 ns;  -- t = 10 ns
+    assert output_s=order_of_output(0)
+      report "Test has failed : output_s/=order_of_output(0)"
+      severity error;
+
+    -- Act
+    wait for 140 ns;  -- t = 150 ns
+    start_i_s <= '1';
+
+    -- Assert : Should be initial state, (start is the next state)
+    wait for 10 ns;  -- t = 160 ns
+    assert output_s=order_of_output(0)
+      report "Test has failed : output_s/=order_of_output(0)"
+      severity error;
+
+    -- Act
+    wait for 90 ns;  -- t = 250 ns
+    start_i_s <= '0';
+
+    -- Assert : Should be start state after a start signal
+    wait for 10 ns;  -- t = 260 ns
+    assert output_s=order_of_output(1)
+      report "Test has failed : output_s/=order_of_output(1)"
+      severity error;
+
+    wait for 90 ns;  -- t = 350 ns
+    for mock_round in 0 to 10 loop
+      -- Act
+      round_i_s <= std_logic_vector(to_unsigned(mock_round, round_i_s'length));  -- Act
+      wait for 10 ns; -- t = 360 + i * 100 ns
+
+      -- Assert : State is R0 after the start State and Counter = 0
+      if (mock_round = 0) then
+        assert output_s=order_of_output(2)
+          report "Test has failed : output_s/=order_of_output(2)"
+          severity error;
+
+      -- Assert : State is R1to9 and Counter between 1 and 9
+      elsif (mock_round <= 9) then
+        assert output_s=order_of_output(3)
+          report "Test has failed : output_s/=order_of_output(3)"
+          severity error;
+
+      -- Assert : State is R10 after the State R1to9 and Counter == 10
+      elsif (mock_round = 10) then
+        assert output_s=order_of_output(4)
+          report "Test has failed : output_s/=order_of_output(4)"
+          severity error;
+      end if;
+
+      -- Align with time
+      wait for 90 ns; -- t = 450 + i * 100 ns
+
+    end loop;
+
+    -- Counter = 10
+
+    -- t = 1450 ns
+
+    wait for 10 ns; -- t = 1460 ns
+
+    -- Assert : State is End
+    assert output_s=order_of_output(5)
+      report "Test has failed : output_s/=order_of_output(5)"
+      severity error;
+
+    wait for 90 ns;  -- t = 1550 ns
+
+    round_i_s <= "0000";  -- Counter should reset if state is idle.
+
+    wait for 10 ns; -- t = 1460 ns
+
+    -- Assert : FSM is reinitialized
+    assert output_s=order_of_output(0)
+      report "Test has failed : output_s/=order_of_output(0)"
+      severity error;
+
+    -- End
+    wait for 5 ns;
+    assert false report "Simulation Finished" severity failure;
+  end process test;
 
 end architecture fsm_aes_tb_arch;

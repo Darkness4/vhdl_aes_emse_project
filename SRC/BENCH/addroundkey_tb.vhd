@@ -29,6 +29,12 @@ architecture addroundkey_tb_arch of addroundkey_tb is
   signal key_i_s: type_state;
   signal data_o_s: type_state;
 
+  -- Arrange
+  constant state_c: type_state := ((x"79", x"47", x"8b", x"65"),
+                                   (x"1b", x"8e", x"81", x"aa"),
+                                   (x"66", x"b7", x"7c", x"6f"),
+                                   (x"62", x"c8", x"e4", x"03"));
+
 begin
 
   DUT: addroundkey port map(
@@ -37,7 +43,7 @@ begin
     data_o => data_o_s
   );
 
-  -- Stimuli
+  -- Act
   data_i_s <= ((x"52", x"6f", x"20", x"6c"),
                (x"65", x"20", x"76", x"65"),
                (x"73", x"65", x"69", x"20"),
@@ -47,5 +53,18 @@ begin
               (x"7e", x"ae", x"f7", x"cf"),
               (x"15", x"d2", x"15", x"4f"),
               (x"16", x"a6", x"88", x"3c"));
+
+  test: process
+  begin
+    -- Assert
+    wait for 5 ns;
+    assert data_o_s = state_c
+      report "data_o_s /= state_c"
+      severity error;
+
+    -- End
+    wait for 5 ns;
+    assert false report "Simulation Finished" severity failure;
+  end process test;
 
 end architecture addroundkey_tb_arch;

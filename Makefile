@@ -1,4 +1,4 @@
-# Makefile Universal by Marc NGUYEN
+# Makefile by Marc NGUYEN
 # Project Name
 TARGET?=$(shell basename $(CURDIR))
 
@@ -18,7 +18,7 @@ LIBS:=$(LIBDIR)/$(LIB_AES) $(LIBDIR)/$(LIB_RTL) $(LIBDIR)/$(LIB_BENCH)
 SOURCES_AES:=$(wildcard $(SRCDIR)/THIRDPARTY/*.vhd)
 SOURCES_RTL:=$(wildcard $(SRCDIR)/RTL/*.vhd)
 SOURCES_RTL_CONF:=$(wildcard $(SRCDIR)/RTL/*_conf.vhd)
-SOURCES_RTL := $(filter-out $(SOURCES_RTL_CONF),$(SOURCES_RTL))
+SOURCES_RTL:=$(filter-out $(SOURCES_RTL_CONF),$(SOURCES_RTL))
 SOURCES_TB:=$(wildcard $(SRCDIR)/BENCH/*_tb.vhd)
 SOURCES_TB_CONF:=$(wildcard $(SRCDIR)/BENCH/*_tb_conf.vhd)
 SOURCES:=$(SOURCES_AES) $(SOURCES_RTL) $(SOURCES_RTL_CONF) $(SOURCES_TB) $(SOURCES_TB_CONF)

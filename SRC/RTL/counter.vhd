@@ -29,11 +29,17 @@ begin
 
   seq_0 : process (clock_i, resetb_i) is
   begin
+    -- Reset clears state
     if resetb_i = '0' then
       round_s <= "0000";
+    
+    -- New data at RISING
     elsif clock_i'event and clock_i = '1' then
+      -- Arm
       if init_counter_i = '1' then
         round_s <= "0000";
+        
+      -- Start counting
       elsif start_counter_i = '1' then
         round_s <= std_logic_vector(unsigned(round_s) + 1);
         if round_s = "1011" then  -- if round > 10

@@ -1,21 +1,32 @@
-# Rapport du projet AES VHDL
+
+
+Marc NGUYEN - 12 Janvier 2020
+
+# <div style="height: 350px;"><div style="margin: 0; position: absolute; top: 80%;">Rapport du Projet Conception d'un Système Numérique AES VHDL</div></div>
+
+
+
+**Modélisation VHDL de l'algorithme de chiffrement AES**
+
+<div style="page-break-after: always; break-after: page;"></div>
+**<u>Table des Matières</u>**
 
 [TOC]
+
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## SubBytes
 
 SubBytes effetcue une transformation non linéaire appliqué à tous les octets de l'état en utilisant une SBox.
 
-<img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111145010909.png" alt="image-20200111145010909" style="zoom: 67%;" />
+<img src="C:/Users/nguye/AppData/Roaming/Typora/typora-user-images/image-20200112151448082.png" alt="image-20200112151448082" style="zoom: 50%;" />
 
-<div style="text-align: center;"><u>Figure 1 : Principe du SubBytes</u></div>
-
+<div style="text-align: center; font-size: 12px;"><u>Figure 1 : Principe du SubBytes</u></div>
 ### SubBytes Entity
 
-![image-20200111145300121](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111145300121.png)
+<img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111145300121.png" alt="image-20200111145300121" style="zoom: 67%;" />
 
-<div style="text-align: center;"><u>Figure 2 : SubBytes Entity</u></div>
-
+<div style="text-align: center; font-size: 12px;"><u>Figure 2 : SubBytes Entity</u></div>
 ```vhdl
 entity subbytes is
 
@@ -29,10 +40,10 @@ end entity subbytes;
 
 Note : Le type `type_state` est un `array(0 to 3) ` de `row_state`, qui lui-même est un `array(0 to 3)` de `bit8` (`std_logic_vector(7 downto 0)`). Il s'agit donc d'un tableau 4 x 4 avec 1 octet par case.
 
-<img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111150051188.png" alt="image-20200111150051188" style="zoom:67%;" />
+<img src="C:/Users/nguye/AppData/Roaming/Typora/typora-user-images/image-20200112151555616.png" alt="image-20200112151555616" style="zoom:50%;" />
 
-<div style="text-align: center;"><u>Figure 3 : Représentation d'un State array</u></div>
-
+<div style="text-align: center; font-size: 12px;"><u>Figure 3 : Représentation d'un State array</u></div>
+<div style="page-break-after: always; break-after: page;"></div>
 ### SubBytes Architecture
 
 Ici, on va chercher à appliquer la SBox sur chaque octet de l'état (16 octets) **de manière concurrente**. Par conséquent, on utilise 1 SBox **pour chaque** octet.
@@ -71,14 +82,14 @@ end architecture subbytes_arch;
 
 Il nous reste plus qu'à implémenter la SBox et **tester**.
 
+<div style="page-break-after: always; break-after: page;"></div>
 ### Component SBox
 
 #### Entity
 
-![image-20200111143937674](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111143937674.png)
+<img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111143937674.png" alt="image-20200111143937674" style="zoom:67%;" />
 
-<div style="text-align: center;"><u>Figure 4 : SBox Entity</u></div>
-
+<div style="text-align: center; font-size: 12px;"><u>Figure 4 : SBox Entity</u></div>
 ```vhdl
 entity sbox is
 
@@ -94,10 +105,9 @@ end entity adder;
 
 **Dans la partie déclarative de l'architecture SBox**, on déclare un `array` de taille 256, **constante**, qui doit représenter la SBox suivante :
 
-![image-20200111144052027](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111144052027.png)
+<img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111144052027.png" alt="image-20200111144052027" style="zoom:67%;" />
 
-<div style="text-align: center;"><u>Figure 5 : SBox fournie à implémenter</u></div>
-
+<div style="text-align: center; font-size: 12px;"><u>Figure 5 : SBox fournie à implémenter</u></div>
 ```vhdl
 architecture sbox_arch of sbox is
   -- Déclaration d'un type "sbox"
@@ -111,10 +121,6 @@ begin
 **Dans la partie descriptive de l'architecture de SBox**, on envoie l'image de `sbox_c` à `data_o`. 
 
 Cependant, il faut noter que `data_i` est en **`bit128`** (`std_logic_vector(127 downto 0)`). Comme l'opérateur `array()` n'accepte que des `integer` en paramètre, on utilise la librairie `ieee.numeric_stc.all` afin de convertir des `std_logic_vector` en `integer`.
-
-<img src="http://www.bitweenie.com/wp-content/uploads/2013/02/vhdl-type-conversions.png" alt="img" style="zoom:50%;" />
-
-<div style="text-align: center;"><u>Figure 6 : Conversion des types en VHDL</u></div>
 
 ```vhdl
 -- Pour utiliser le type bit8
@@ -142,67 +148,22 @@ begin
 end architecture sbox_arch;
 ```
 
+<div style="page-break-after: always; break-after: page;"></div>
 #### Testbench
 
-En entrée :  Un variable allant de 0 à 255.
+Test : "Tout l'ensemble de 0 à 255 doit correspondre à la SBox"
 
-On s'attend à obtenir la sbox.
+- En entrée :  Un variable allant de 0 à 255.
 
-```vhdl
-entity sbox_tb is
-end entity sbox_tb;
-
-architecture sbox_tb_arch of sbox_tb is
-
-  -- Composant à tester
-  component sbox
-    port(
-      data_i: in bit8;
-      data_o: out bit8
-    );
-  end component;
-
-  -- Signaux pour la simulation
-  signal data_i_s: bit8;
-  signal data_o_s: bit8;
-
-  -- Signaux attendu (Arrange)
-  type sbox_t is array (0 to 255) of bit8;
-  constant sbox_c: sbox_t := (
-    X"52", X"09", [...], X"0c", X"7d"
-  );
-
-begin
-
-  DUT: sbox port map(
-    data_i => data_i_s,
-    data_o => data_o_s
-  );
-
-  test: process
-  begin
-    for stimuli in 0 to 255 loop
-      data_i_s <= std_logic_vector(to_unsigned(stimuli, data_i_s'length));  -- Act
-      wait for 5 ns;
-
-      assert data_o_s=sbox_c(stimuli)  -- Assert
-        report "Test has failed : data_o_s/=sbox_c(stimuli)"
-        severity error;
-      wait for 5 ns;
-    end loop;
-    assert false Report "Simulation Finished" severity failure;
-  end process test;
-
-end architecture sbox_tb_arch;
-```
+- On s'attend à obtenir la transformation de la variable à partir de la SBox.
 
 **Résultat :**
 
 ![image-20200111153131535](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111153131535.png)
 
-<div style="text-align: center;"><u>Figure 7 : Résultat obtenu pour le test SBox</u></div>
+<div style="text-align: center; font-size: 12px;"><u>Figure 6 : Résultat obtenu pour le test SBox</u></div>
 
-Log :
+En passant par les test par assertions VHDL, on obtient dans la console :
 
 ```txt
 # ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
@@ -212,7 +173,7 @@ Log :
 # Break in Process test at SRC/BENCH/sbox_tb.vhd line 70
 ```
 
-Toutes les assertions sont passés, donc **sbox est validé**.
+Donc, toutes les assertions sont passées, donc **sbox est validé**.
 
 Manuellement : sbox(0x7D) = 0x13. 
 
@@ -236,63 +197,11 @@ Ce que l'on attend :
  (x"ab", x"b1", x"ab", x"d5"))
 ```
 
-VHDL :
-
-```vhdl
-architecture subbytes_tb_arch of subbytes_tb is
-
-  -- Composant à tester
-  component subbytes
-    port(
-      data_i: in type_state;
-      data_o: out type_state
-    );
-  end component;
-
-  -- Signaux pour la simulation
-  signal data_i_s: type_state;
-  signal data_o_s: type_state;
-
-  -- Arrange
-  constant state_c: type_state := ((x"af", x"16", x"ce", x"bc"),
-                                   (x"44", x"e6", x"91", x"62"),
-                                   (x"d3", x"20", x"01", x"06"),
-                                   (x"ab", x"b1", x"ab", x"d5"));
-
-begin
-
-  DUT: subbytes port map(
-    data_i => data_i_s,
-    data_o => data_o_s
-  );
-
-  -- Act
-  data_i_s <= ((x"79", x"47", x"8b", x"65"),
-               (x"1b", x"8e", x"81", x"aa"),
-               (x"66", x"b7", x"7c", x"6f"),
-               (x"62", x"c8", x"e4", x"03"));
-
-  test: process
-  begin
-    -- Assert
-    wait for 5 ns;
-    assert data_o_s = state_c
-      report "data_o_s /= state_c"
-      severity error;
-
-    -- End
-    wait for 5 ns;
-    assert false report "Simulation Finished" severity failure;
-  end process test;
-
-end architecture subbytes_tb_arch;
-```
-
 **Résultat :**
 
 ![image-20200111155500281](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111155500281.png)
 
-<div style="text-align: center;"><u>Figure 8 : Résultat obtenu pour le test SubBytes</u></div>
+<div style="text-align: center; font-size: 12px;"><u>Figure 7 : Résultat obtenu pour le test SubBytes</u></div>
 
 Toutes les assertions sont passés, donc **SubBytes est validé**.
 
@@ -300,7 +209,8 @@ Manuellement : D'après la figure ci-dessus, nous avons exactement ce que l'on a
 
 ![image-20200111155840432](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111155840432.png)
 
- <div style="text-align: center;"><u>Figure 9 : Extrait de l'énoncé pour la validation SubBytes</u></div>
+ <div style="text-align: center; font-size: 12px;"><u>Figure 8 : Extrait de l'énoncé pour la validation SubBytes</u></div>
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## ShiftRows
 
@@ -310,13 +220,13 @@ Le décalage dépend de indice (0...3) de la ligne.
 
 <img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111160117960.png" alt="image-20200111160117960" style="zoom:67%;" />
 
- <div style="text-align: center;"><u>Figure 10 : Fonctionnement de ShiftRows</u></div>
+ <div style="text-align: center; font-size: 12px;"><u>Figure 9 : Fonctionnement de ShiftRows</u></div>
 
 ### ShiftRows Entity
 
-![image-20200111160208097](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111160208097.png)
+<img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111160208097.png" alt="image-20200111160208097" style="zoom:67%;" />
 
-<div style="text-align: center;"><u>Figure 11 : ShiftRows Entity</u></div>
+<div style="text-align: center; font-size: 12px;"><u>Figure 10 : ShiftRows Entity</u></div>
 
 ```vhdl
 entity subbytes is
@@ -329,6 +239,7 @@ entity subbytes is
 end entity subbytes;
 ```
 
+<div style="page-break-after: always; break-after: page;"></div>
 ### ShiftRows Architecture
 
 **Dans la partie descriptive de l'architecture  de ShiftRows,** on utilisera des boucles `generate` afin d'appliquer la permutation de manière concurrente.
@@ -366,62 +277,13 @@ Ce que l'on attend :
  (x"bc", x"e0", x"81", x"fc"))
 ```
 
-VHDL :
-
-```vhdl
-architecture shiftrows_tb_arch of shiftrows_tb is
-
-  -- Composant à tester
-  component shiftrows
-    port(
-      data_i: in type_state;
-      data_o: out type_state
-    );
-  end component;
-
-  signal data_i_s: type_state;
-  signal data_o_s: type_state;
-
-  -- Arrange
-  constant state_c: type_state := ((x"a0", x"29", x"43", x"21"),
-                                   (x"ae", x"8e", x"d5", x"fa"),
-                                   (x"2f", x"6d", x"d9", x"21"),
-                                   (x"bc", x"e0", x"81", x"fc"));
-
-begin
-
-  DUT: shiftrows port map(
-    data_i => data_i_s,
-    data_o => data_o_s
-  );
-
-  -- Act
-  data_i_s <= ((x"af", x"16", x"ce", x"bc"),
-               (x"44", x"e6", x"91", x"62"),
-               (x"d3", x"20", x"01", x"06"),
-               (x"ab", x"b1", x"ae", x"d5"));
-
-  test: process
-  begin
-    -- Assert
-    wait for 5 ns;
-    assert data_o_s = state_c
-      report "data_o_s /= state_c"
-      severity error;
-
-    -- End
-    wait for 5 ns;
-    assert false report "Simulation Finished" severity failure;
-  end process test;
-
-end architecture shiftrows_tb_arch;
-```
+<div style="page-break-after: always; break-after: page;"></div>
 
 **Résultat :**
 
 ![image-20200111162204472](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111162204472.png)
 
-<div style="text-align: center;"><u>Figure 12 : Résultat obtenu pour le test ShiftRows</u></div>
+<div style="text-align: center; font-size: 12px;"><u>Figure 11 : Résultat obtenu pour le test ShiftRows</u></div>
 
 Toutes les assertions sont passés, donc **ShiftRows est validé**.
 
@@ -429,7 +291,8 @@ Manuellement : D'après la figure ci-dessus, nous avons exactement ce que l'on a
 
 ![image-20200111162231815](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111162231815.png)
 
- <div style="text-align: center;"><u>Figure 13 : Extrait de l'énoncé pour la validation ShiftRows</u></div>
+ <div style="text-align: center; font-size: 12px;"><u>Figure 12 : Extrait de l'énoncé pour la validation ShiftRows</u></div>
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## MixColumns
 
@@ -437,13 +300,13 @@ MixColumns applique une transformation linaire sur chaque colonne de l'état.
 
 <img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111162430372.png" alt="image-20200111162430372" style="zoom:67%;" />
 
- <div style="text-align: center;"><u>Figure 14 : Fonctionnement de MixColumns</u></div>
+ <div style="text-align: center; font-size: 12px;"><u>Figure 13 : Fonctionnement de MixColumns</u></div>
 
 ### MixColumns Entity
 
-![image-20200111163104429](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111163104429.png)
+<img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111163104429.png" alt="image-20200111163104429" style="zoom:67%;" />
 
- <div style="text-align: center;"><u>Figure 15 : MixColumns Entity</u></div>
+ <div style="text-align: center; font-size: 12px;"><u>Figure 14 : MixColumns Entity</u></div>
 
 La MixColumns possède comme **entrée** :
 
@@ -519,6 +382,7 @@ begin
 end architecture mixcolumns_arch;
 ```
 
+<div style="page-break-after: always; break-after: page;"></div>
 ### Component MixColumn
 
 Les colonnes doivent être traitées comme des polynômes dans $GF(2^{8})^2$ et multipliées modulo $x^8+x^4+x^3+x+1$.
@@ -552,13 +416,11 @@ La fonction MixColumn doit être appliqué de cette manière :
 
 <img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111170629737.png" alt="image-20200111170629737" style="zoom:67%;" />
 
- <div style="text-align: center;"><u>Figure 16 : Produit matriciel de la fonction MixColumns</u></div>
-
 #### Entity
 
-![image-20200111170820958](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111170820958.png)
+<img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111170820958.png" alt="image-20200111170820958" style="zoom:67%;" />
 
- <div style="text-align: center;"><u>Figure 17 : MixColumn Entity</u></div>
+ <div style="text-align: center; font-size: 12px;"><u>Figure 15 : MixColumn Entity</u></div>
 
 ```vhdl
 entity mixcolumn is
@@ -649,65 +511,19 @@ Ce que l'on attend :
 (x"a0", x"ae", x"2f", x"bc")
 ```
 
-VHDL :
-
-```vhdl
-architecture mixcolumn_tb_arch of mixcolumn_tb is
-
-  -- Composant à tester
-  component mixcolumn
-    port(
-      data_i: in column_state;
-      data_o: out column_state
-    );
-  end component;
-
-  -- Signaux pour la simulation
-  signal data_i_s: column_state;
-  signal data_o_s: column_state;
-
-  -- Arrange
-  constant column_c: column_state := (x"a0", x"ae", x"2f", x"bc");
-
-begin
-
-  DUT: mixcolumn port map(
-    data_i => data_i_s,
-    data_o => data_o_s
-  );
-
-  -- Act
-  data_i_s <= (x"af", x"44", x"d3", x"ab");
-
-  test: process
-  begin
-    -- Assert
-    wait for 5 ns;
-    assert data_o_s = column_c
-      report "data_o_s /= column_c"
-      severity error;
-
-    -- End
-    wait for 5 ns;
-    assert false report "Simulation Finished" severity failure;
-  end process test;
-
-end architecture mixcolumn_tb_arch;
-```
-
 **Résultat :**
 
 ![image-20200111173602799](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111173602799.png)
 
-<div style="text-align: center;"><u>Figure 18 : Résultat obtenu pour le test MixColumn</u></div>
+<div style="text-align: center; font-size: 12px;"><u>Figure 16 : Résultat obtenu pour le test MixColumn</u></div>
 
 Toutes les assertions sont passés, donc **MixColumn est validé**.
 
 Manuellement : D'après la figure ci-dessus, nous avons exactement ce que l'on attend :
 
-![image-20200111173746553](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111173746553.png)
+<img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111173746553.png" alt="image-20200111173746553" style="zoom: 67%;" />
 
- <div style="text-align: center;"><u>Figure 19 : Extrait de l'énoncé pour la validation MixColumn</u></div>
+ <div style="text-align: center; font-size: 12px;"><u>Figure 17 : Extrait de l'énoncé pour la validation MixColumn</u></div>
 
 ### MixColumns TestBench
 
@@ -741,85 +557,21 @@ Quand `enable_i = 0`
  (x"d5", x"ab", x"b1", x"ae"));
 ```
 
-VHDL :
-
-```vhdl
-architecture mixcolumns_tb_arch of mixcolumns_tb is
-
-  -- Composant à tester
-  component mixcolumns
-    port(
-      data_i: in type_state;
-      enable_i: in std_logic;
-      data_o: out type_state
-    );
-  end component;
-
-  -- Signaux pour la simulation
-  signal data_i_s: type_state;
-  signal data_o_s: type_state;
-  signal enable_i_s: std_logic;
-
-  -- Arrange
-  constant state_when_enabled_c: type_state := ((x"a0", x"29", x"43", x"21"),
-                                                (x"ae", x"8e", x"d5", x"fa"),
-                                                (x"2f", x"6d", x"d9", x"51"),
-                                                (x"bc", x"e0", x"81", x"fc"));
-  constant state_when_disabled_c: type_state := ((x"af", x"16", x"ce", x"bc"),
-                                                 (x"e6", x"91", x"62", x"44"),
-                                                 (x"01", x"06", x"d3", x"20"),
-                                                 (x"d5", x"ab", x"b1", x"ae"));
-begin
-
-  DUT: mixcolumns port map(
-    data_i => data_i_s,
-    enable_i => enable_i_s,
-    data_o => data_o_s
-  );
-
-  -- Stimuli
-  data_i_s <= ((x"af", x"16", x"ce", x"bc"),
-               (x"e6", x"91", x"62", x"44"),
-               (x"01", x"06", x"d3", x"20"),
-               (x"d5", x"ab", x"b1", x"ae"));
-  
-  enable_i_s <= '0',
-                '1' after 50 ns;
-
-  test: process
-  begin
-    -- Assert
-    wait for 5 ns;
-    assert data_o_s = state_when_disabled_c
-      report "data_o_s /= state_when_disabled_c"
-      severity error;
-
-    wait for 50 ns;
-    assert data_o_s = state_when_enabled_c
-      report "data_o_s /= state_when_enabled_c"
-      severity error;
-
-    -- End
-    wait for 5 ns;
-    assert false report "Simulation Finished" severity failure;
-  end process test;
-
-end architecture mixcolumns_tb_arch;
-```
-
 **Résultat :**
 
-![image-20200111174703197](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111174703197.png)
+![image-20200112023428259](C:/Users/nguye/AppData/Roaming/Typora/typora-user-images/image-20200112023428259.png)
 
-<div style="text-align: center;"><u>Figure 20 : Résultat obtenu pour le test MixColumns</u></div>
+<div style="text-align: center; font-size: 12px;"><u>Figure 18 : Résultat obtenu pour le test MixColumns</u></div>
 
 Toutes les assertions sont passés, donc **MixColumns est validé**.
 
+<div style="page-break-after: always; break-after: page;"></div>
 Manuellement : D'après la figure ci-dessus, nous avons exactement ce que l'on attend :
 
 ![image-20200111174856738](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111174856738.png)
 
- <div style="text-align: center;"><u>Figure 21 : Extrait de l'énoncé pour la validation MixColumns</u></div>
+ <div style="text-align: center; font-size: 12px;"><u>Figure 19 : Extrait de l'énoncé pour la validation MixColumns</u></div>
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## AddRoundKey
 
@@ -827,9 +579,9 @@ AddRoundKey fait simplement un XOR entre l'état et une sous clé (round key).
 
 ### AddRoundKey Entity
 
-![image-20200111175354867](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111175354867.png)
+<img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111175354867.png" alt="image-20200111175354867" style="zoom:67%;" />
 
-<div style="text-align: center;"><u>Figure 22 : AddRoundKey Entity</u></div>
+<div style="text-align: center; font-size: 12px;"><u>Figure 20 : AddRoundKey Entity</u></div>
 
 VHDL :
 
@@ -862,6 +614,7 @@ begin
 end architecture;
 ```
 
+<div style="page-break-after: always; break-after: page;"></div>
 ### AddRoundKey TestBench
 
 En entrée : un state et une sous-clé
@@ -893,79 +646,21 @@ Ce que l'on attend :
  (x"62", x"c8", x"e4", x"03"))
 ```
 
-VHDL :
-
-```vhdl
-architecture addroundkey_tb_arch of addroundkey_tb is
-
-  -- Composant à tester
-  component addroundkey
-    port(
-      data_i: in type_state;
-      key_i: in type_state;
-      data_o: out type_state
-    );
-  end component;
-
-  -- Signaux pour la simulation
-  signal data_i_s: type_state;
-  signal key_i_s: type_state;
-  signal data_o_s: type_state;
-
-  -- Arrange
-  constant state_c: type_state := ((x"79", x"47", x"8b", x"65"),
-                                   (x"1b", x"8e", x"81", x"aa"),
-                                   (x"66", x"b7", x"7c", x"6f"),
-                                   (x"62", x"c8", x"e4", x"03"));
-
-begin
-
-  DUT: addroundkey port map(
-    data_i => data_i_s,
-    key_i => key_i_s,
-    data_o => data_o_s
-  );
-
-  -- Act
-  data_i_s <= ((x"52", x"6f", x"20", x"6c"),
-               (x"65", x"20", x"76", x"65"),
-               (x"73", x"65", x"69", x"20"),
-               (x"74", x"6e", x"6c", x"3f"));
-
-  key_i_s <= ((x"2b", x"28", x"ab", x"09"),
-              (x"7e", x"ae", x"f7", x"cf"),
-              (x"15", x"d2", x"15", x"4f"),
-              (x"16", x"a6", x"88", x"3c"));
-
-  test: process
-  begin
-    -- Assert
-    wait for 5 ns;
-    assert data_o_s = state_c
-      report "data_o_s /= state_c"
-      severity error;
-
-    -- End
-    wait for 5 ns;
-    assert false report "Simulation Finished" severity failure;
-  end process test;
-
-end architecture addroundkey_tb_arch;
-```
-
 **Résultat :**
 
 ![image-20200111180044804](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111180044804.png)
 
-<div style="text-align: center;"><u>Figure 23 : Résultat obtenu pour le test AddRoundKey</u></div>
+<div style="text-align: center; font-size: 12px;"><u>Figure 21 : Résultat obtenu pour le test AddRoundKey</u></div>
 
 Toutes les assertions sont passés, donc **AddRoundKey est validé**.
 
+<div style="page-break-after: always; break-after: page;"></div>
 Manuellement : D'après la figure ci-dessus, nous avons exactement ce que l'on attend :
 
 ![image-20200111180158254](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111180158254.png)
 
- <div style="text-align: center;"><u>Figure 24 : Extrait de l'énoncé pour la validation AddRoundKey</u></div>
+ <div style="text-align: center; font-size: 12px;"><u>Figure 22 : Extrait de l'énoncé pour la validation AddRoundKey</u></div>
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## Round
 
@@ -973,15 +668,16 @@ Un round doit appliquer toute les fonctions que nous avons développé jusque l�
 
 ![image-20200111180655286](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111180655286.png)
 
- <div style="text-align: center;"><u>Figure 25 : Composition des rounds</u></div>
+ <div style="text-align: center; font-size: 12px;"><u>Figure 23 : Composition des rounds</u></div>
 
 Il nous faudra donc cadencer notre architecture avec un registre D. 
 
+<div style="page-break-after: always; break-after: page;"></div>
 ### Round Entity
 
-![image-20200111181933225](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111181933225.png)
+<img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111181933225.png" alt="image-20200111181933225" style="zoom:67%;" />
 
- <div style="text-align: center;"><u>Figure 26 : Round Entity</u></div>
+ <div style="text-align: center; font-size: 12px;"><u>Figure 24 : Round Entity</u></div>
 
 Le Round possède comme **entrée** :
 
@@ -1011,6 +707,7 @@ entity round is
 end entity round;
 ```
 
+<div style="page-break-after: always; break-after: page;"></div>
 ### Round Architecture
 
 Comme nos entrées sont des `bit128` et que notre architecture se base sur des `type_state`, on convertira les `bits128` en entrée en `state`, et les `state` en sortie en `bit128`
@@ -1019,7 +716,7 @@ On prévoit donc notre architecture VHDL :
 
 ![image-20200111182151979](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111182151979.png)
 
- <div style="text-align: center;"><u>Figure 27 : Round Architecture</u></div>
+ <div style="text-align: center; font-size: 12px;"><u>Figure 25 : Round Architecture</u></div>
 
 On connecte donc nos différents composants en VHDL :
 
@@ -1090,15 +787,16 @@ begin
 end architecture round_arch;
 ```
 
+<div style="page-break-after: always; break-after: page;"></div>
 ### Component Registre D
 
 Le registre D permettra de cadencer notre round et de synchroniser avec un compteur de round et une machine d'état.
 
 #### Entity
 
-![image-20200111215605203](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111215605203.png)
+<img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111215605203.png" alt="image-20200111215605203" style="zoom:67%;" />
 
- <div style="text-align: center;"><u>Figure 28 : Registre D Entity</u></div>
+ <div style="text-align: center; font-size: 12px;"><u>Figure 26 : Registre D Entity</u></div>
 
 ```vhdl
 entity register_d is
@@ -1151,219 +849,92 @@ end architecture register_d_arch;
 
 #### TestBench
 
-```vhdl
-architecture register_d_tb_arch of register_d_tb is
+Test 1 : "Le registre D n'est pas initialisé avant le premier coup ascendant d'horloge"
 
-  component register_d
-    port (
-      resetb_i : in std_logic;
-      clock_i : in std_logic;
-      state_i : in type_state;
-      state_o : out type_state
-    );
-  end component register_d;
+Test 2 : "Le registre D est initialisé après le premier coup ascendant d'horloge"
 
-  signal resetb_i_s : std_logic;
-  signal clock_i_s : std_logic;
-  signal state_i_s : type_state;
-  signal state_o_s : type_state;
+Test 3 : "Le registre D change d'état après un coup ascendant d'horloge"
 
-  -- Arrange
-  constant unintialized_state: type_state := ((x"00", x"00", x"00", x"00"),
-                                              (x"00", x"00", x"00", x"00"),
-                                              (x"00", x"00", x"00", x"00"),
-                                              (x"00", x"00", x"00", x"00"));
-  constant first_state: type_state := ((x"00", x"04", x"08", x"0C"),
-                                       (x"01", x"05", x"09", x"0D"),
-                                       (x"02", x"06", x"0A", x"0E"),
-                                       (x"03", x"07", x"0B", x"0F"));
-  constant second_state: type_state := ((x"DE", x"AD", x"BE", x"EF"),
-                                        (x"BA", x"DD", x"CA", x"FE"),
-                                        (x"DE", x"AD", x"C0", x"DE"),
-                                        (x"CA", x"DE", x"D0", x"0D"));
-
-begin
-
-  DUT: register_d 
-    port map(
-      resetb_i => resetb_i_s,
-      clock_i => clock_i_s,
-      state_i => state_i_s,
-      state_o => state_o_s
-    );
-
-  -- CLK T = 100 ns
-  clock_i_s <= '0', '1' after 50 ns,
-               '0' after 100 ns, '1' after 150 ns,
-               '0' after 200 ns, '1' after 250 ns,
-               '0' after 300 ns, '1' after 350 ns,
-               '0' after 400 ns, '1' after 450 ns,
-               '0' after 500 ns, '1' after 550 ns;
-
-  -- Act
-  resetb_i_s <= '0', '1' after 5 ns, '0' after 290 ns;
-  state_i_s <= ((x"00", x"04", x"08", x"0C"),
-                (x"01", x"05", x"09", x"0D"),
-                (x"02", x"06", x"0A", x"0E"),
-                (x"03", x"07", x"0B", x"0F")),
-               ((x"DE", x"AD", x"BE", x"EF"),
-                (x"BA", x"DD", x"CA", x"FE"),
-                (x"DE", x"AD", x"C0", x"DE"),
-                (x"CA", x"DE", x"D0", x"0D")) after 100 ns;
-
-  test: process
-  begin
-    -- Assert : 
-    -- Test : Register D is not initialized before RISING
-    wait for 5 ns;  -- t = 5 ns
-    assert state_o_s = unintialized_state
-      report "state_o_s /= unintialized_state"
-      severity error;
-
-    -- Test : Register D is now initialized  after RISING
-    wait for 50 ns;  -- t = 55 ns
-    assert state_o_s = first_state
-      report "state_o_s /= first_state"
-      severity error;
-
-    -- Test : Register D change state after RISING
-    wait for 100 ns;  -- t = 155 ns
-    assert state_o_s = second_state
-      report "state_o_s /= second_state"
-      severity error;
-    
-    -- Test : Register D reset suddenly without caring about clock_i
-    wait for 140 ns;  -- t = 295 ns
-    assert state_o_s = unintialized_state
-      report "state_o_s /= unintialized_state"
-      severity error;
-
-    -- End
-    wait for 5 ns;
-    assert false report "Simulation Finished" severity failure;
-  end process test;
-end architecture register_d_tb_arch;
-```
+Test 4 : "Le registre D se réinitialise avec resetb_i sans attendre l'horloge"
 
 **Résultat :**
 
 ![image-20200111185711131](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111185711131.png)
 
-<div style="text-align: center;"><u>Figure 29 : Résultat obtenu pour le test Registre D</u></div>
+<div style="text-align: center; font-size: 12px;"><u>Figure 27 : Résultat obtenu pour le test Registre D</u></div>
 
 Toutes les assertions sont passés, donc **Registre D est validé**.
 
+<div style="page-break-after: always; break-after: page;"></div>
 ### Component state_to_bit128 et bit128_to_state
 
 La relation entrée/sortie avec le composant est assez explicite. 
 
 ![image-20200111183328696](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111183328696.png)
+$$
+a0 = \{input_0,\, input_1,\, …,\, input_7\}; \\
+a1 = \{input_8,\, input_9,\, …,\, input_{15}\}; \\
+\vdots \\
+a15 = \{input_{120},\, input_{121},\, …,\, input_{127}\}. \\
+$$
 
-### Round TestBench
+<div style="text-align: center; font-size: 12px;"><u>Figure 28 : Concordance des bits avec les octets d'un état</u></div>
 
-On teste le Round 0 et le round 1 inscrit dans l'énoncé.
+Source :  NIST, [“Fips-197, announcing the ADVANCED ENCRYPTION STANDARD (AES)”](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197.pdf)
+
+Avec bit128 to state :
 
 ```vhdl
-architecture round_tb_arch of round_tb is
+entity bit128_to_state is
 
-  -- Composant à tester
-  component round
-    port(
-      text_i: in bit128;
-      current_key_i: in bit128;
-      clock_i: in std_logic;
-      resetb_i: in std_logic;
-      enable_round_computing_i: in std_logic;
-      enable_mix_columns_i: in std_logic;
-      cipher_o: out bit128
-    );
-  end component;
-
-  -- Signaux pour la simulation
-  signal text_i_s: bit128;
-  signal current_key_i_s: bit128;
-  signal cipher_o_s: bit128;
-  signal clock_i_s: std_logic;
-  signal resetb_i_s: std_logic;
-  signal enable_round_computing_s: std_logic;
-  signal enable_mix_columns_s: std_logic;
-
-  -- Arrange
-  constant uninitialized_state: unsigned(127 downto 0) := x"00000000000000000000000000000000";
-  constant first_state: unsigned(127 downto 0) := x"791b6662478eb7c88b817ce465aa6f03";
-  constant second_state: unsigned(127 downto 0) := x"d54257ea74ccc710b56066f9de80a1b8";
-
-begin
-
-  DUT: round port map(
-    text_i => text_i_s,
-    current_key_i => current_key_i_s,
-    clock_i => clock_i_s,
-    resetb_i => resetb_i_s,
-    enable_round_computing_i => enable_round_computing_s,
-    enable_mix_columns_i => enable_mix_columns_s,
-    cipher_o =>  cipher_o_s
+  port (
+    data_i: in bit128;
+    data_o: out type_state
   );
 
-  -- Act
-  -- Test two usecases
-  -- Usecase : Round 0 between 0 and 50 ns.
-  -- Expect : output_ARK = 791b6662478eb7c88b817ce465aa6f03 after 50 ns
-  -- Usecase : Round 1 between 50 and 100 ns.
-  -- Expect : cipher_state_s = 791b6662478eb7c88b817ce465aa6f03
-  -- Expect : output_SB = af44d3ab16e620b1ce9101aebc6206d5
-  -- Expect : output_SR = afe601d5169106abce62d3b1bc4420ae
-  -- Expect : output_MC = a0ae2fbc298e6de043d5d98121fa51fc
-  -- Expect : output_ARK = d54257ea74ccc710b56066f9de80a1b8 after 50 ns
-  resetb_i_s <= '0', '1' after 10 ns;
+end entity bit128_to_state;
 
-  clock_i_s <= '0', '1' after 50 ns,
-               '0' after 100 ns, '1' after 150 ns,
-               '0' after 200 ns, '1' after 250 ns;
+architecture bit128_to_state_arch of bit128_to_state is
+begin
 
-  enable_round_computing_s <= '0', '1' after 50 ns;
-  enable_mix_columns_s <= '0', '1' after 50 ns;
+  rows: for i in 0 to 3 generate
+    cases: for j in 0 to 3 generate
+      data_o(3 - i)(3 - j) <= data_i((8 * (i+1) - 1) + (32 * j) downto (i * 8 + j * 32));
+    end generate cases;
+  end generate rows;
 
-  text_i_s <= x"526573746f20656e2076696c6c65203f";
-
-  current_key_i_s <= x"2b7e151628aed2a6abf7158809cf4f3c", 
-                     x"75ec78565d42aaf0f6b5bf78ff7af044" after 50 ns;
-
-  test: process
-  begin
-    -- Assert
-    -- Test : Not initialized
-    wait for 5 ns;
-    assert unsigned(cipher_o_s) = uninitialized_state
-      report "cipher_o_s /= uninitialized_state"
-      severity error;
-
-    -- Test : Round 0
-    wait for 50 ns;
-    assert unsigned(cipher_o_s) = first_state
-      report "cipher_o_s /= first_state"
-      severity error;
-
-    -- Test : Round 1
-    wait for 150 ns;
-    assert unsigned(cipher_o_s) = second_state
-      report "cipher_o_s /= second_state"
-      severity error;
-
-
-    -- End
-    wait for 5 ns;
-    assert false report "Simulation Finished" severity failure;
-  end process test;
-
-end architecture round_tb_arch;
+end architecture bit128_to_state_arch;
 ```
+
+<div style="page-break-after: always; break-after: page;"></div>
+### Round TestBench
+
+On teste le Round 0 et le Round 1 inscrit dans l'énoncé.
+
+Test 1 : "Le round n'est pas initialisé avant le coup d'horloge"
+
+Test 2 : "Le resultat du round 1 (791b6662478eb7c88b817ce465aa6f03) est obtenu au premier coup d'horloge."
+
+- En entrée : 
+  - `enable_round_computing_s=0`
+  - `enable_mix_columns_s=0` 
+  - `text_i_s="526573746f20656e2076696c6c65203f"`
+  - `current_key_i_s="2b7e151628aed2a6abf7158809cf4f3c"`
+
+Test 3 : "Le resultat du round 2 (d54257ea74ccc710b56066f9de80a1b8) est obtenu au 2e coup d'horloge."
+
+- En entrée : 
+  - La suite du test 2 (`791b6662478eb7c88b817ce465aa6f03`)
+  - `enable_round_computing_s=1`
+  - `enable_mix_columns_s=1` 
+  - `text_i_s="526573746f20656e2076696c6c65203f"`
+  - `current_key_i_s="75ec78565d42aaf0f6b5bf78ff7af044"`
 
 **Résultat :**
 
 ![image-20200111194647748](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111194647748.png)
 
-<div style="text-align: center;"><u>Figure 30 : Résultat obtenu pour le test Round</u></div>
+<div style="text-align: center; font-size: 12px;"><u>Figure 29 : Résultat obtenu pour le test Round</u></div>
 
 Toutes les assertions sont passés, donc **Round est validé**.
 
@@ -1371,7 +942,8 @@ Manuellement : D'après la figure ci-dessus, nous avons exactement ce que l'on a
 
 ![image-20200111195206914](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111195206914.png)
 
- <div style="text-align: center;"><u>Figure 40 : Extrait de l'énoncé pour la validation Round</u></div>
+ <div style="text-align: center; font-size: 12px;"><u>Figure 30 : Extrait de l'énoncé pour la validation Round</u></div>
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## AES
 
@@ -1383,9 +955,9 @@ On utilisera un signal `start_i` pour démarrer l'AES et un signal `aes_on_o` af
 
 
 
-![image-20200111215937077](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111215937077.png)
+<img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111215937077.png" alt="image-20200111215937077" style="zoom:67%;" />
 
- <div style="text-align: center;"><u>Figure 41 : AES Entity</u></div>
+ <div style="text-align: center; font-size: 12px;"><u>Figure 31 : AES Entity</u></div>
 
 ```vhdl
 entity aes is
@@ -1402,15 +974,16 @@ entity aes is
 end entity aes;
 ```
 
+<div style="page-break-after: always; break-after: page;"></div>
 ### AES Architecture
 
 On prévoit cette architecture :
 
 ![image-20200111225719439](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111225719439.png)
 
- <div style="text-align: center;"><u>Figure 41 : AES Architecture</u></div>
+ <div style="text-align: center; font-size: 12px;"><u>Figure 32 : AES Architecture</u></div>
 
-VHDL :
+Cela se fait sans problème en VHDL :
 
 ```vhdl
 architecture aes_arch of aes is
@@ -1481,13 +1054,14 @@ begin
 end architecture aes_arch;
 ```
 
+<div style="page-break-after: always; break-after: page;"></div>
 ### Component Machine d'Etat
 
 La machine d'état contrôle le comportement du round en fonction du compteur de round.
 
 ![image-20191226155750386](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20191226155750386.png)
 
- <div style="text-align: center;"><u>Figure 42 : Machine d'état</u></div>
+ <div style="text-align: center; font-size: 12px;"><u>Figure 33 : Machine d'état</u></div>
 
 Voici donc la configuration des données en fonction des états :
 
@@ -1500,11 +1074,12 @@ Voici donc la configuration des données en fonction des états :
 |   enable_RC_o   |   0   |       0       |    0    |   **1**    |  **1**  |    0    |
 |   enable_MC_o   |   0   |       0       |    0    |   **1**    |    0    |    0    |
 
+<div style="page-break-after: always; break-after: page;"></div>
 #### Entity
 
-![image-20200111220751861](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111220751861.png)
+<img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111220751861.png" alt="image-20200111220751861" style="zoom:67%;" />
 
- <div style="text-align: center;"><u>Figure 43 : Machine d'état Entity</u></div>
+ <div style="text-align: center; font-size: 12px;"><u>Figure 34 : Machine d'état Entity</u></div>
 
 D'après le diagramme d'état, on définit rapidement les entrées et les sorties :
 
@@ -1527,6 +1102,7 @@ entity fsm_aes is
 end entity fsm_aes;
 ```
 
+<div style="page-break-after: always; break-after: page;"></div>
 #### Architecture
 
 **Dans la partie déclarative**, on définit nos états : 
@@ -1615,143 +1191,26 @@ Pour changer les données en fonction de l'état, nous utiliserons également un
 
 #### TestBench
 
-Le scénario est tel décrit ci-dessous :
+Les tests unitaires sont :
 
-```vhdl
-architecture fsm_aes_tb_arch of fsm_aes_tb is
-
-  -- [...]
-
-  -- Arrange
-  type order_t is array (0 to 5) of output_t;
-  constant order_of_output: order_t := (
-    -- init, start, enable_output, aes_on, enable_RC, enable_MC
-    ('1', '0', '0', '0', '0', '0'), -- idle
-    ('1', '1', '0', '0', '0', '0'), -- start
-    ('0', '1', '0', '1', '0', '0'), -- R0
-    ('0', '1', '0', '1', '1', '1'), -- R1to9
-    ('0', '0', '0', '1', '1', '0'), -- R10
-    ('0', '0', '1', '0', '0', '0')  -- end
-  );
-
-begin
-
-  DUT: fsm_aes port map(
-    round_i => round_i_s,
-    clock_i => clock_i_s,
-    resetb_i => resetb_i_s,
-    start_i => start_i_s,
-    init_counter_o => output_s(0),
-    start_counter_o => output_s(1),
-    enable_output_o => output_s(2),
-    aes_on_o => output_s(3),
-    enable_round_computing_o => output_s(4),
-    enable_mix_columns_o => output_s(5)
-  );
-
-  -- [...]
-
-  test: process
-  begin
-    -- Act
-    round_i_s <= "0000";
-    start_i_s <= '0';
-
-    -- Assert : Should be initial state
-    wait for 10 ns;  -- t = 10 ns
-    assert output_s=order_of_output(0)
-      report "Test has failed : output_s/=order_of_output(0)"
-      severity error;
-
-    -- Act
-    wait for 140 ns;  -- t = 150 ns
-    start_i_s <= '1';
-
-    -- Assert : Should be initial state, (start is the next state)
-    wait for 10 ns;  -- t = 160 ns
-    assert output_s=order_of_output(0)
-      report "Test has failed : output_s/=order_of_output(0)"
-      severity error;
-
-    -- Act
-    wait for 90 ns;  -- t = 250 ns
-    start_i_s <= '0';
-
-    -- Assert : Should be start state after a start signal
-    wait for 10 ns;  -- t = 260 ns
-    assert output_s=order_of_output(1)
-      report "Test has failed : output_s/=order_of_output(1)"
-      severity error;
-
-    wait for 90 ns;  -- t = 350 ns
-    for mock_round in 0 to 10 loop
-      -- Act
-      round_i_s <= std_logic_vector(to_unsigned(mock_round, round_i_s'length));  -- Act
-      wait for 10 ns; -- t = 360 + i * 100 ns
-
-      -- Assert : State is R0 after the start State and Counter = 0
-      if (mock_round = 0) then
-        assert output_s=order_of_output(2)
-          report "Test has failed : output_s/=order_of_output(2)"
-          severity error;
-
-      -- Assert : State is R1to9 and Counter between 1 and 9
-      elsif (mock_round <= 9) then
-        assert output_s=order_of_output(3)
-          report "Test has failed : output_s/=order_of_output(3)"
-          severity error;
-
-      -- Assert : State is R10 after the State R1to9 and Counter == 10
-      elsif (mock_round = 10) then
-        assert output_s=order_of_output(4)
-          report "Test has failed : output_s/=order_of_output(4)"
-          severity error;
-      end if;
-
-      -- Align with time
-      wait for 90 ns; -- t = 450 + i * 100 ns
-
-    end loop;
-
-    -- Counter = 10
-
-    -- t = 1450 ns
-
-    wait for 10 ns; -- t = 1460 ns
-
-    -- Assert : State is End
-    assert output_s=order_of_output(5)
-      report "Test has failed : output_s/=order_of_output(5)"
-      severity error;
-
-    wait for 90 ns;  -- t = 1550 ns
-
-    round_i_s <= "0000";  -- Counter should reset if state is idle.
-
-    wait for 10 ns; -- t = 1460 ns
-
-    -- Assert : FSM is reinitialized
-    assert output_s=order_of_output(0)
-      report "Test has failed : output_s/=order_of_output(0)"
-      severity error;
-
-    -- End
-    wait for 5 ns;
-    assert false report "Simulation Finished" severity failure;
-  end process test;
-
-end architecture fsm_aes_tb_arch;
-```
+- Test 1 : "Tester que la FSM est en état initial (Idle)"
+- Test 2 : "Pendant un signal start, la FSM reste en état initial mais son état futur est start_counter"
+- Test 3 : "Après un signal start, la FSM est en état start_counter"
+- Test 4 : "Après l'état start, la FSM est en état R0"
+- Test 5 : "Après l'état R0, la FSM est en état R1toR9"
+- Test 6 : "Après l'état R1toR9, la FSM est en état R10"
+- Test 7 : "Après l'état R10, la FSM est en état End"
+- Test 8 : "Après l'état End, la FSM est en état Idle"
 
 **Résultat :**
 
-![image-20200112010348311](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200112010348311.png)
+![image-20200112153458095](C:/Users/nguye/AppData/Roaming/Typora/typora-user-images/image-20200112153458095.png)
 
-<div style="text-align: center;"><u>Figure 44 : Résultat obtenu pour le test Machine d'Etat</u></div>
+<div style="text-align: center; font-size: 12px;"><u>Figure 35 : Résultat obtenu pour le test Machine d'Etat</u></div>
 
 Toutes les assertions sont passés, donc **la machine d'état est validé**.
 
-Manuellement : On peut voir que l'ordre des états décrit la même évolution prévu que sur la figure TODO.
+Manuellement : On peut voir que l'ordre des états décrit la même évolution prévu que sur la figure 42.
 
 ### Component Compteur de Round
 
@@ -1761,7 +1220,7 @@ Notre compteur doit aller de 0 à 10, on utilise donc un compteur 4 bits.
 
 ![image-20200111221758363](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111221758363.png)
 
- <div style="text-align: center;"><u>Figure 45 : Compteur Entity</u></div>
+ <div style="text-align: center; font-size: 12px;"><u>Figure 36 : Compteur Entity</u></div>
 
 Notre compteur devra être armé avec `init_counter_i`, et devra s'incrémenter dès que le `start_counter_i` passe à 1.
 
@@ -1779,7 +1238,10 @@ entity counter is
 end entity counter;
 ```
 
+<div style="page-break-after: always; break-after: page;"></div>
 #### Architecture
+
+L'architecture est simplement basé sur un registre D.
 
 ```vhdl
 architecture counter_arch of counter is
@@ -1787,7 +1249,6 @@ architecture counter_arch of counter is
   signal round_s : bit4;
 
 begin
-
   seq_0 : process (clock_i, resetb_i) is
   begin
     -- Reset clears state
@@ -1802,177 +1263,53 @@ begin
         
       -- Start counting
       elsif start_counter_i = '1' then
-        if round_s = "1010" then  -- Limit
+        round_s <= std_logic_vector(unsigned(round_s) + 1);
+        if round_s = "1011" then  -- if round > 10
           round_s <= "0000";
-        else
-          round_s <= std_logic_vector(unsigned(round_s) + 1);
         end if;
       end if;
     end if;
   end process seq_0;
 
   round_o <= round_s;
-
 end architecture counter_arch;
 ```
 
 #### TestBench
 
-```vhdl
-architecture counter_tb_arch of counter_tb is
+Les tests unitaires sont :
 
-  -- [...]
-
-begin
-
-  DUT: counter port map(
-    clock_i => clock_i_s,
-    resetb_i => resetb_i_s,
-    init_counter_i => init_counter_i_s,
-    start_counter_i => start_counter_i_s,
-    round_o => round_o_s
-  );
-
-  clock: process
-  begin
-    clock_i_s <= '0';
-    wait for 50 ns;
-    clock_i_s <= '1';
-    wait for 50 ns;
-  end process clock;
-
-  resetb_i_s <= '0', '1' after 140 ns;
-
-  -- Act (expected from FSM behavior)
-  init_counter_i_s <= '0', '1' after 150 ns, '0' after 450 ns, '1' after 1550 ns;
-  start_counter_i_s <= '0', '1' after 251 ns, '0' after 1450 ns;
-
-  test: process
-  begin
-    wait for 350 ns; -- t = 350 ns
-    for test_round in 0 to 10 loop
-      -- Assert
-      wait for 10 ns; -- t = 360 + i * 100 ns
-      assert unsigned(round_o_s)=test_round
-        report "Test has failed : round_o_s/=test_round"
-        severity error;
-      wait for 90 ns; -- t = 450 + i * 100 ns
-    end loop;
-
-    -- t = 1450 ns
-
-    wait for 10 ns; -- t = 1460 ns
-
-    -- Test: Counter shouldn't increase when start = 0
-    assert unsigned(round_o_s)=10
-      report "Test has failed : round_o_s/=0"
-      severity error;
-
-    wait for 100 ns; -- t = 1560 ns
-
-    -- Test : Counter should reset when init = 1
-    assert unsigned(round_o_s)=0
-      report "Test has failed : round_o_s/=0"
-      severity error;
-
-    -- End
-    wait for 5 ns;
-    assert false report "Simulation Finished" severity failure;
-  end process test;
-
-end architecture counter_tb_arch;
-```
+- Test 1 : "Le compteur s'incrémente et suit le timing prévu"
+- Test 2 : "Le compteur s'arrête quand start = 0"
+- Test 3 : "Le compteur se réinitialise quand init = 1"
 
 **Résultat :**
 
 ![image-20200112011443858](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200112011443858.png)
 
-<div style="text-align: center;"><u>Figure 46 : Résultat obtenu pour le test Compteur</u></div>
+<div style="text-align: center; font-size: 12px;"><u>Figure 37 : Résultat obtenu pour le test Compteur</u></div>
 
 Toutes les assertions sont passés, donc **la machine d'état est validé**.
 
 Manuellement : On peut voir que nous incrémentons jusqu'à 10, puis s'arrête quand start = 0, et se réinitialise quand init = 1.
 
+<div style="page-break-after: always; break-after: page;"></div>
+
 ### AES TestBench
 
-```vhdl
-architecture aes_tb_arch of aes_tb is
+Nous faisons 2 starts.
 
-  -- [...]
+Les tests unitaires sont :
 
-  constant cipher_c: unsigned(127 downto 0) := x"d4f125f097f7cee747669b783056caa7";
-
-begin
-
-  DUT: aes port map(
-    clock_i => clock_i_s,
-    resetb_i => resetb_i_s,
-    start_i => start_i_s,
-    text_i => text_i_s,
-    aes_on_o => aes_on_o_s,
-    cipher_o => cipher_o_s
-  );
-
-  clock: process
-  begin
-    clock_i_s <= '0';
-    wait for 50 ns;
-    clock_i_s <= '1';
-    wait for 50 ns;
-  end process clock;
-
-  resetb_i_s <= '0', '1' after 40 ns;
-
-  -- Act
-  start_i_s <= '0', '1' after 150 ns, '0' after 250 ns, '1' after 1850 ns, '0' after 1950 ns;
-  text_i_s <= x"526573746f20656e2076696c6c65203f";
-
-  -- Assert
-  test: process
-  begin
-    -- First shot
-    wait for 260 ns;
-    assert aes_on_o_s='1'
-      report "Test has failed : aes_on_o_s/=1 when state is round0"
-      severity error;
-
-    wait for 1100 ns;  -- t = 1360 ns
-    assert aes_on_o_s='0'
-      report "Test has failed : aes_on_o_s/=0 when state is end"
-      severity error;
-    assert unsigned(cipher_o_s)=cipher_c
-      report "Test has failed : cipher_o_s/=cipher_c"
-      severity error;
-
-    assert false report "First Shot Finished" severity failure;
-
-    -- Second shot
-    wait for 600 ns;  -- t = 1960 ns
-    assert aes_on_o_s='1'
-      report "Test has failed : aes_on_o_s/=1 when state is round0"
-      severity error;
-
-    wait for 1100 ns;  -- t = 2960 ns
-    assert aes_on_o_s='0'
-      report "Test has failed : aes_on_o_s/=0 when state is end"
-      severity error;
-    assert unsigned(cipher_o_s)=cipher_c
-      report "Test has failed : cipher_o_s/=cipher_c"
-      severity error;
-
-    -- End
-    wait for 5 ns;
-    assert false report "Second Shot Finished" severity failure;
-  end process;
-
-end architecture aes_tb_arch;
-```
+- Test 1 : "aes_on_o_s = 1 après un start"
+- Test 2 : "aes_on_o_s = 0 à la fin et obtient le bon résultat"
 
 **Résultat final :**
 
 ![image-20200112021102841](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200112021102841.png)
 
-<div style="text-align: center;"><u>Figure 47 : Résultat obtenu pour le test AES</u></div>
+<div style="text-align: center; font-size: 12px;"><u>Figure 38 : Résultat obtenu pour le test AES</u></div>
+
 Toutes les assertions sont passés, donc **l'AES' est validé**.
 
 Manuellement : On peut vérifier chaque `cipher_o` correspond aux fin des rounds :
@@ -2010,7 +1347,10 @@ Manuellement : On peut vérifier chaque `cipher_o` correspond aux fin des rounds
 > Round 10
 > AddRoundKey : d4 f1 25 f0 97 f7 ce e7 47 66 9b 78 30 56 ca a7
 
-# Annexe
+<div style="page-break-after: always; break-after: page;"></div>
 
+## Conclusion
 
+La modélisation VHDL du chiffrement AES est maintenant validé. Il ne reste plus qu'à intégrer un mode d'opération (tel que [CBC ou Cipher Block Chaining](https://patents.google.com/patent/US4074066A/en)) pour pouvoir chiffrer plusieurs blocs et intégrer au niveau matériel.
 
+Ce projet n'a posé aucune difficulté, ni ralentissement et a été très formateur.

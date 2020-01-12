@@ -27,6 +27,12 @@ architecture bit128_to_state_tb_arch of bit128_to_state_tb is
   signal data_i_s: bit128;
   signal data_o_s: type_state;
 
+  -- Arrange
+  constant state_c: type_state := ((x"af", x"16", x"ce", x"bc"),
+                                   (x"44", x"e6", x"91", x"62"),
+                                   (x"d3", x"20", x"01", x"06"),
+                                   (x"ab", x"b1", x"ae", x"d5"));
+
 begin
 
   DUT: bit128_to_state port map(
@@ -34,8 +40,21 @@ begin
     data_o => data_o_s
   );
 
-  -- Stimuli
+  -- Act
   data_i_s <= x"af44d3ab16e620b1ce9101aebc6206d5";
+
+  test: process
+  begin
+    -- Assert
+    wait for 5 ns;
+    assert data_o_s = state_c
+      report "data_o_s /= state_c"
+      severity error;
+
+    -- End
+    wait for 5 ns;
+    assert false report "Simulation Finished" severity failure;
+  end process test;
 
 end architecture bit128_to_state_tb_arch;
 

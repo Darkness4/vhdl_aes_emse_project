@@ -31,7 +31,7 @@ architecture subbytes_tb_arch of subbytes_tb is
   constant state_c: type_state := ((x"af", x"16", x"ce", x"bc"),
                                    (x"44", x"e6", x"91", x"62"),
                                    (x"d3", x"20", x"01", x"06"),
-                                   (x"ab", x"b1", x"ab", x"d5"));
+                                   (x"ab", x"b1", x"ae", x"d5"));
 
 begin
 

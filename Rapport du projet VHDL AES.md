@@ -14,7 +14,6 @@ Marc NGUYEN - 12 Janvier 2020
 [TOC]
 
 <div style="page-break-after: always; break-after: page;"></div>
-
 ## SubBytes
 
 SubBytes effetcue une transformation non linéaire appliqué à tous les octets de l'état en utilisant une SBox.
@@ -162,7 +161,6 @@ Test : "Tout l'ensemble de 0 à 255 doit correspondre à la SBox"
 ![image-20200111153131535](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111153131535.png)
 
 <div style="text-align: center; font-size: 12px;"><u>Figure 6 : Résultat obtenu pour le test SBox</u></div>
-
 En passant par les test par assertions VHDL, on obtient dans la console :
 
 ```txt
@@ -194,15 +192,14 @@ Ce que l'on attend :
 ((x"af", x"16", x"ce", x"bc"),
  (x"44", x"e6", x"91", x"62"),
  (x"d3", x"20", x"01", x"06"),
- (x"ab", x"b1", x"ab", x"d5"))
+ (x"ab", x"b1", x"ae", x"d5"))
 ```
 
 **Résultat :**
 
-![image-20200111155500281](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111155500281.png)
+![image-20200112162842632](C:/Users/nguye/AppData/Roaming/Typora/typora-user-images/image-20200112162842632.png)
 
 <div style="text-align: center; font-size: 12px;"><u>Figure 7 : Résultat obtenu pour le test SubBytes</u></div>
-
 Toutes les assertions sont passés, donc **SubBytes est validé**.
 
 Manuellement : D'après la figure ci-dessus, nous avons exactement ce que l'on attend :
@@ -211,7 +208,6 @@ Manuellement : D'après la figure ci-dessus, nous avons exactement ce que l'on a
 
  <div style="text-align: center; font-size: 12px;"><u>Figure 8 : Extrait de l'énoncé pour la validation SubBytes</u></div>
 <div style="page-break-after: always; break-after: page;"></div>
-
 ## ShiftRows
 
 ShiftRows doit permuter les octets de chaque ligne de l'état.
@@ -221,13 +217,11 @@ Le décalage dépend de indice (0...3) de la ligne.
 <img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111160117960.png" alt="image-20200111160117960" style="zoom:67%;" />
 
  <div style="text-align: center; font-size: 12px;"><u>Figure 9 : Fonctionnement de ShiftRows</u></div>
-
 ### ShiftRows Entity
 
 <img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111160208097.png" alt="image-20200111160208097" style="zoom:67%;" />
 
 <div style="text-align: center; font-size: 12px;"><u>Figure 10 : ShiftRows Entity</u></div>
-
 ```vhdl
 entity subbytes is
 
@@ -278,13 +272,11 @@ Ce que l'on attend :
 ```
 
 <div style="page-break-after: always; break-after: page;"></div>
-
 **Résultat :**
 
 ![image-20200111162204472](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111162204472.png)
 
 <div style="text-align: center; font-size: 12px;"><u>Figure 11 : Résultat obtenu pour le test ShiftRows</u></div>
-
 Toutes les assertions sont passés, donc **ShiftRows est validé**.
 
 Manuellement : D'après la figure ci-dessus, nous avons exactement ce que l'on attend :
@@ -293,7 +285,6 @@ Manuellement : D'après la figure ci-dessus, nous avons exactement ce que l'on a
 
  <div style="text-align: center; font-size: 12px;"><u>Figure 12 : Extrait de l'énoncé pour la validation ShiftRows</u></div>
 <div style="page-break-after: always; break-after: page;"></div>
-
 ## MixColumns
 
 MixColumns applique une transformation linaire sur chaque colonne de l'état.
@@ -301,13 +292,11 @@ MixColumns applique une transformation linaire sur chaque colonne de l'état.
 <img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111162430372.png" alt="image-20200111162430372" style="zoom:67%;" />
 
  <div style="text-align: center; font-size: 12px;"><u>Figure 13 : Fonctionnement de MixColumns</u></div>
-
 ### MixColumns Entity
 
 <img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111163104429.png" alt="image-20200111163104429" style="zoom:67%;" />
 
  <div style="text-align: center; font-size: 12px;"><u>Figure 14 : MixColumns Entity</u></div>
-
 La MixColumns possède comme **entrée** :
 
 - la matrice d'état en entrée que l'on nomme `data_i`, de type `type_state`
@@ -421,7 +410,6 @@ La fonction MixColumn doit être appliqué de cette manière :
 <img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111170820958.png" alt="image-20200111170820958" style="zoom:67%;" />
 
  <div style="text-align: center; font-size: 12px;"><u>Figure 15 : MixColumn Entity</u></div>
-
 ```vhdl
 entity mixcolumn is
 
@@ -516,7 +504,6 @@ Ce que l'on attend :
 ![image-20200111173602799](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111173602799.png)
 
 <div style="text-align: center; font-size: 12px;"><u>Figure 16 : Résultat obtenu pour le test MixColumn</u></div>
-
 Toutes les assertions sont passés, donc **MixColumn est validé**.
 
 Manuellement : D'après la figure ci-dessus, nous avons exactement ce que l'on attend :
@@ -524,7 +511,6 @@ Manuellement : D'après la figure ci-dessus, nous avons exactement ce que l'on a
 <img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111173746553.png" alt="image-20200111173746553" style="zoom: 67%;" />
 
  <div style="text-align: center; font-size: 12px;"><u>Figure 17 : Extrait de l'énoncé pour la validation MixColumn</u></div>
-
 ### MixColumns TestBench
 
 En entrée : un état et 2 cas d'utilisation (enabled et disabled)
@@ -562,7 +548,6 @@ Quand `enable_i = 0`
 ![image-20200112023428259](C:/Users/nguye/AppData/Roaming/Typora/typora-user-images/image-20200112023428259.png)
 
 <div style="text-align: center; font-size: 12px;"><u>Figure 18 : Résultat obtenu pour le test MixColumns</u></div>
-
 Toutes les assertions sont passés, donc **MixColumns est validé**.
 
 <div style="page-break-after: always; break-after: page;"></div>
@@ -572,7 +557,6 @@ Manuellement : D'après la figure ci-dessus, nous avons exactement ce que l'on a
 
  <div style="text-align: center; font-size: 12px;"><u>Figure 19 : Extrait de l'énoncé pour la validation MixColumns</u></div>
 <div style="page-break-after: always; break-after: page;"></div>
-
 ## AddRoundKey
 
 AddRoundKey fait simplement un XOR entre l'état et une sous clé (round key).
@@ -582,7 +566,6 @@ AddRoundKey fait simplement un XOR entre l'état et une sous clé (round key).
 <img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111175354867.png" alt="image-20200111175354867" style="zoom:67%;" />
 
 <div style="text-align: center; font-size: 12px;"><u>Figure 20 : AddRoundKey Entity</u></div>
-
 VHDL :
 
 ```vhdl
@@ -651,7 +634,6 @@ Ce que l'on attend :
 ![image-20200111180044804](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111180044804.png)
 
 <div style="text-align: center; font-size: 12px;"><u>Figure 21 : Résultat obtenu pour le test AddRoundKey</u></div>
-
 Toutes les assertions sont passés, donc **AddRoundKey est validé**.
 
 <div style="page-break-after: always; break-after: page;"></div>
@@ -661,7 +643,6 @@ Manuellement : D'après la figure ci-dessus, nous avons exactement ce que l'on a
 
  <div style="text-align: center; font-size: 12px;"><u>Figure 22 : Extrait de l'énoncé pour la validation AddRoundKey</u></div>
 <div style="page-break-after: always; break-after: page;"></div>
-
 ## Round
 
 Un round doit appliquer toute les fonctions que nous avons développé jusque là. En fonction du nombre de round, nous devrons sélectionner quel fonction appliquer :
@@ -669,7 +650,6 @@ Un round doit appliquer toute les fonctions que nous avons développé jusque l�
 ![image-20200111180655286](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111180655286.png)
 
  <div style="text-align: center; font-size: 12px;"><u>Figure 23 : Composition des rounds</u></div>
-
 Il nous faudra donc cadencer notre architecture avec un registre D. 
 
 <div style="page-break-after: always; break-after: page;"></div>
@@ -678,7 +658,6 @@ Il nous faudra donc cadencer notre architecture avec un registre D.
 <img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111181933225.png" alt="image-20200111181933225" style="zoom:67%;" />
 
  <div style="text-align: center; font-size: 12px;"><u>Figure 24 : Round Entity</u></div>
-
 Le Round possède comme **entrée** :
 
 - Le texte clair que l'on nomme `text_i`, de type `bit128`
@@ -717,7 +696,6 @@ On prévoit donc notre architecture VHDL :
 ![image-20200111182151979](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111182151979.png)
 
  <div style="text-align: center; font-size: 12px;"><u>Figure 25 : Round Architecture</u></div>
-
 On connecte donc nos différents composants en VHDL :
 
 ```vhdl
@@ -797,7 +775,6 @@ Le registre D permettra de cadencer notre round et de synchroniser avec un compt
 <img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111215605203.png" alt="image-20200111215605203" style="zoom:67%;" />
 
  <div style="text-align: center; font-size: 12px;"><u>Figure 26 : Registre D Entity</u></div>
-
 ```vhdl
 entity register_d is
 
@@ -862,7 +839,6 @@ Test 4 : "Le registre D se réinitialise avec resetb_i sans attendre l'horloge"
 ![image-20200111185711131](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111185711131.png)
 
 <div style="text-align: center; font-size: 12px;"><u>Figure 27 : Résultat obtenu pour le test Registre D</u></div>
-
 Toutes les assertions sont passés, donc **Registre D est validé**.
 
 <div style="page-break-after: always; break-after: page;"></div>
@@ -879,7 +855,6 @@ a15 = \{input_{120},\, input_{121},\, …,\, input_{127}\}. \\
 $$
 
 <div style="text-align: center; font-size: 12px;"><u>Figure 28 : Concordance des bits avec les octets d'un état</u></div>
-
 Source :  NIST, [“Fips-197, announcing the ADVANCED ENCRYPTION STANDARD (AES)”](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197.pdf)
 
 Avec bit128 to state :
@@ -935,7 +910,6 @@ Test 3 : "Le resultat du round 2 (d54257ea74ccc710b56066f9de80a1b8) est obtenu a
 ![image-20200111194647748](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111194647748.png)
 
 <div style="text-align: center; font-size: 12px;"><u>Figure 29 : Résultat obtenu pour le test Round</u></div>
-
 Toutes les assertions sont passés, donc **Round est validé**.
 
 Manuellement : D'après la figure ci-dessus, nous avons exactement ce que l'on attend :
@@ -944,7 +918,6 @@ Manuellement : D'après la figure ci-dessus, nous avons exactement ce que l'on a
 
  <div style="text-align: center; font-size: 12px;"><u>Figure 30 : Extrait de l'énoncé pour la validation Round</u></div>
 <div style="page-break-after: always; break-after: page;"></div>
-
 ## AES
 
 Pour gérer les états de l'AES, nous utiliserons une machine d'état couplé avec un compteur de round. En fonction de l'état, nous fournissons la sous-clé correspondante au round et exécutons le round.
@@ -958,7 +931,6 @@ On utilisera un signal `start_i` pour démarrer l'AES et un signal `aes_on_o` af
 <img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111215937077.png" alt="image-20200111215937077" style="zoom:67%;" />
 
  <div style="text-align: center; font-size: 12px;"><u>Figure 31 : AES Entity</u></div>
-
 ```vhdl
 entity aes is
 
@@ -982,7 +954,6 @@ On prévoit cette architecture :
 ![image-20200111225719439](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111225719439.png)
 
  <div style="text-align: center; font-size: 12px;"><u>Figure 32 : AES Architecture</u></div>
-
 Cela se fait sans problème en VHDL :
 
 ```vhdl
@@ -1062,7 +1033,6 @@ La machine d'état contrôle le comportement du round en fonction du compteur de
 ![image-20191226155750386](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20191226155750386.png)
 
  <div style="text-align: center; font-size: 12px;"><u>Figure 33 : Machine d'état</u></div>
-
 Voici donc la configuration des données en fonction des états :
 
 |                 | idle  | start_counter | round_0 | round_1to9 | round10 | end_fsm |
@@ -1080,7 +1050,6 @@ Voici donc la configuration des données en fonction des états :
 <img src="C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111220751861.png" alt="image-20200111220751861" style="zoom:67%;" />
 
  <div style="text-align: center; font-size: 12px;"><u>Figure 34 : Machine d'état Entity</u></div>
-
 D'après le diagramme d'état, on définit rapidement les entrées et les sorties :
 
 ```vhdl
@@ -1207,7 +1176,6 @@ Les tests unitaires sont :
 ![image-20200112153458095](C:/Users/nguye/AppData/Roaming/Typora/typora-user-images/image-20200112153458095.png)
 
 <div style="text-align: center; font-size: 12px;"><u>Figure 35 : Résultat obtenu pour le test Machine d'Etat</u></div>
-
 Toutes les assertions sont passés, donc **la machine d'état est validé**.
 
 Manuellement : On peut voir que l'ordre des états décrit la même évolution prévu que sur la figure 42.
@@ -1221,7 +1189,6 @@ Notre compteur doit aller de 0 à 10, on utilise donc un compteur 4 bits.
 ![image-20200111221758363](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200111221758363.png)
 
  <div style="text-align: center; font-size: 12px;"><u>Figure 36 : Compteur Entity</u></div>
-
 Notre compteur devra être armé avec `init_counter_i`, et devra s'incrémenter dès que le `start_counter_i` passe à 1.
 
 ```vhdl
@@ -1288,13 +1255,11 @@ Les tests unitaires sont :
 ![image-20200112011443858](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200112011443858.png)
 
 <div style="text-align: center; font-size: 12px;"><u>Figure 37 : Résultat obtenu pour le test Compteur</u></div>
-
 Toutes les assertions sont passés, donc **la machine d'état est validé**.
 
 Manuellement : On peut voir que nous incrémentons jusqu'à 10, puis s'arrête quand start = 0, et se réinitialise quand init = 1.
 
 <div style="page-break-after: always; break-after: page;"></div>
-
 ### AES TestBench
 
 Nous faisons 2 starts.
@@ -1309,7 +1274,6 @@ Les tests unitaires sont :
 ![image-20200112021102841](C:\Users\nguye\AppData\Roaming\Typora\typora-user-images\image-20200112021102841.png)
 
 <div style="text-align: center; font-size: 12px;"><u>Figure 38 : Résultat obtenu pour le test AES</u></div>
-
 Toutes les assertions sont passés, donc **l'AES' est validé**.
 
 Manuellement : On peut vérifier chaque `cipher_o` correspond aux fin des rounds :
@@ -1348,7 +1312,6 @@ Manuellement : On peut vérifier chaque `cipher_o` correspond aux fin des rounds
 > AddRoundKey : d4 f1 25 f0 97 f7 ce e7 47 66 9b 78 30 56 ca a7
 
 <div style="page-break-after: always; break-after: page;"></div>
-
 ## Conclusion
 
 La modélisation VHDL du chiffrement AES est maintenant validé. Il ne reste plus qu'à intégrer un mode d'opération (tel que [CBC ou Cipher Block Chaining](https://patents.google.com/patent/US4074066A/en)) pour pouvoir chiffrer plusieurs blocs et intégrer au niveau matériel.
